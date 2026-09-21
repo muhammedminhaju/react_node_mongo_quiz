@@ -1,3 +1,10 @@
+export function generateId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
 export function fisherYates(array) {
   const copy = [...array];
   for (let i = copy.length - 1; i > 0; i -= 1) {

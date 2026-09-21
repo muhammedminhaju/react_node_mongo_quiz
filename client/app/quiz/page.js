@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
 import Modal from '@/components/Modal';
 import { fetchQuestions } from '@/lib/api';
-import { fisherYates } from '@/lib/quizUtils';
+import { fisherYates, generateId } from '@/lib/quizUtils';
 import { loadSettings } from '@/lib/storage';
 
 const QUIZ_STATE_KEY = 'quizTempState';
@@ -173,7 +173,7 @@ export default function QuizPage() {
     const percentage = totalQuestions ? Math.round((correct / totalQuestions) * 100) : 0;
 
     const result = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       topic: state.topic || 'Quiz',
       date: new Date().toISOString(),
       totalQuestions,
