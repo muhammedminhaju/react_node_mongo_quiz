@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: '/quiz', label: 'Quiz' },
   { href: '/revision', label: 'Revision' },
   { href: '/history', label: 'History' },
+  { href: '/reports', label: 'Reports' },
   { href: '/questions', label: 'Question Management' },
   { href: '/topics', label: 'Topics' },
   { href: '/settings', label: 'Settings' }
