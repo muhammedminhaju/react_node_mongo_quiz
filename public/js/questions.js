@@ -16,10 +16,30 @@ function showToast(message) {
   showToast.timer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
+function normalizeTopics(rawTopics) {
+  return (rawTopics || []).map((topic) => {
+    if (typeof topic === 'string') {
+      return {
+        name: topic,
+        label: topic
+          .split('_')
+          .filter(Boolean)
+          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+          .join(' ')
+      };
+    }
+    return {
+      name: topic?.name || topic?.value || '',
+      label: topic?.label || topic?.name || topic?.value || ''
+    };
+  }).filter((topic) => topic.name);
+}
+
 async function fetchTopics() {
   const response = await fetch('/api/topics');
   if (!response.ok) throw new Error('Unable to load topics.');
-  return response.json();
+  const data = await response.json();
+  return normalizeTopics(data);
 }
 
 async function loadQuestions(topic) {
@@ -69,9 +89,15 @@ function fillQuestionForm(fields) {
 
 async function renderTopicOptions() {
   const topics = await fetchTopics();
+  if (!topics.length) {
+    if (topicFilter) topicFilter.innerHTML = '<option value="">No topics available</option>';
+    if (questionTopic) questionTopic.innerHTML = '<option value="">No topics available</option>';
+    return;
+  }
+
   const selectHtml = topics.map((topic) => `<option value="${topic.name}">${topic.label}</option>`).join('');
-  topicFilter.innerHTML = selectHtml;
-  questionTopic.innerHTML = selectHtml;
+  if (topicFilter) topicFilter.innerHTML = selectHtml;
+  if (questionTopic) questionTopic.innerHTML = selectHtml;
 
   if (topics.length) {
     topicFilter.value = topics[0].name;
@@ -79,12 +105,12 @@ async function renderTopicOptions() {
     loadQuestionsGrid(topics[0].name);
   }
 
-  topicFilter.addEventListener('change', () => loadQuestionsGrid(topicFilter.value));
-  questionTopic.addEventListener('change', () => updateCorrectAnswerOptions());
-  document.getElementById('optionA').addEventListener('input', updateCorrectAnswerOptions);
-  document.getElementById('optionB').addEventListener('input', updateCorrectAnswerOptions);
-  document.getElementById('optionC').addEventListener('input', updateCorrectAnswerOptions);
-  document.getElementById('optionD').addEventListener('input', updateCorrectAnswerOptions);
+  topicFilter?.addEventListener('change', () => loadQuestionsGrid(topicFilter.value));
+  questionTopic?.addEventListener('change', () => updateCorrectAnswerOptions());
+  document.getElementById('optionA')?.addEventListener('input', updateCorrectAnswerOptions);
+  document.getElementById('optionB')?.addEventListener('input', updateCorrectAnswerOptions);
+  document.getElementById('optionC')?.addEventListener('input', updateCorrectAnswerOptions);
+  document.getElementById('optionD')?.addEventListener('input', updateCorrectAnswerOptions);
 }
 
 async function loadQuestionsGrid(topic) {

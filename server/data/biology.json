@@ -5,10 +5,10 @@
     "options": [
       "Lungs",
       "Heart",
-      "Liver",
+      "Eye",
       "Kidney"
     ],
-    "answer": "Heart",
+    "answer": "Lungs",
     "explanation": "The heart pumps oxygenated blood to the body and deoxygenated blood to the lungs."
   },
   {
