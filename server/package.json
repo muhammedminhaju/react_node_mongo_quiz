@@ -1,0 +1,16 @@
+{
+  "name": "quiz-app-server",
+  "version": "1.0.0",
+  "description": "Express JSON API for the quiz app (topics and questions backed by JSON files)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
