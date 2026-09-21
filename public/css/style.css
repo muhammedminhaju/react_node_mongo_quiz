@@ -185,11 +185,28 @@ button, input, textarea, select {
   border-radius: 14px;
   min-height: 94px;
   display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.topic-card-body {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.topic-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .topic-card:hover {

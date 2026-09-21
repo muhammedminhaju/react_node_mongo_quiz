@@ -38,6 +38,16 @@ function readTopicList() {
   });
 }
 
+function resolveTopicFile(topicName) {
+  const safeName = String(topicName || '').trim();
+  if (!safeName || safeName.includes('..') || safeName.includes('/')) {
+    return null;
+  }
+
+  const fileName = `${safeName}.json`;
+  return path.join(dataDir, fileName);
+}
+
 router.get('/', (req, res) => {
   const topics = readTopicList();
   res.json(topics.map((topic) => topic.name));
@@ -82,6 +92,81 @@ router.post('/', (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to create topic data file.' });
+  }
+});
+
+router.put('/:name', (req, res) => {
+  const currentTopic = String(req.params.name || '').trim();
+
+  if (!currentTopic) {
+    return res.status(400).json({ error: 'Topic name is required.' });
+  }
+
+  const sourcePath = resolveTopicFile(currentTopic);
+  if (!sourcePath || !fs.existsSync(sourcePath)) {
+    return res.status(404).json({ error: 'Topic not found.' });
+  }
+
+  const targetName = String(req.body?.newName || req.body?.name || '').trim();
+  const targetFileName = String(req.body?.fileName || '').trim();
+
+  if (!targetName && !targetFileName) {
+    return res.status(400).json({ error: 'A new topic name or file name is required.' });
+  }
+
+  const finalName = targetName || currentTopic;
+  const nextFileName = targetFileName || `${safeFileNameFromTopic(finalName)}.json`;
+
+  if (!nextFileName.toLowerCase().endsWith('.json')) {
+    return res.status(400).json({ error: 'JSON file name must end with .json.' });
+  }
+
+  const cleanFileName = nextFileName.replace(/\\/g, '/').split('/').pop();
+  if (!cleanFileName || cleanFileName.includes('..')) {
+    return res.status(400).json({ error: 'Invalid topic file name.' });
+  }
+
+  const targetPath = path.join(dataDir, cleanFileName);
+  const nextTopicKey = cleanFileName.replace(/\.json$/i, '');
+
+  if (sourcePath !== targetPath && fs.existsSync(targetPath)) {
+    return res.status(409).json({ error: 'A topic with that file name already exists.' });
+  }
+
+  try {
+    if (sourcePath !== targetPath) {
+      fs.renameSync(sourcePath, targetPath);
+    }
+
+    res.json({
+      message: 'Topic renamed successfully.',
+      topic: {
+        name: nextTopicKey,
+        label: finalName
+      }
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Unable to rename topic.' });
+  }
+});
+
+router.delete('/:name', (req, res) => {
+  const currentTopic = String(req.params.name || '').trim();
+
+  if (!currentTopic) {
+    return res.status(400).json({ error: 'Topic name is required.' });
+  }
+
+  const sourcePath = resolveTopicFile(currentTopic);
+  if (!sourcePath || !fs.existsSync(sourcePath)) {
+    return res.status(404).json({ error: 'Topic not found.' });
+  }
+
+  try {
+    fs.unlinkSync(sourcePath);
+    res.json({ message: 'Topic deleted successfully.' });
+  } catch (error) {
+    return res.status(500).json({ error: 'Unable to delete topic.' });
   }
 });
 

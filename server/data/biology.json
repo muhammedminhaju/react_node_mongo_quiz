@@ -22,5 +22,17 @@
     ],
     "answer": "Mitochondria",
     "explanation": "Mitochondria generate most of the cell's ATP, hence the nickname 'powerhouse of the cell'."
+  },
+  {
+    "id": 3,
+    "question": "3",
+    "options": [
+      "3",
+      "33",
+      "333",
+      "3333"
+    ],
+    "answer": "3",
+    "explanation": "3"
   }
 ]
