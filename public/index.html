@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">Q</div>
+          <div>
+            <h2>Quiz App</h2>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="/" class="active">Dashboard</a>
+          <a href="/quiz">Quiz</a>
+          <a href="/revision">Revision</a>
+          <a href="/history">History</a>
+          <a href="/questions">Question Management</a>
+          <a href="/topics">Topics</a>
+          <a href="/settings">Settings</a>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="mobile-menu">☰</button>
+          <div class="topbar-title">Dashboard</div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary" id="startQuickQuizBtn">Start Quiz</button>
+          </div>
+        </header>
+
+        <section class="dashboard-grid">
+          <div class="stat-card">
+            <div class="label">Total Quizzes Taken</div>
+            <div class="value" id="totalQuizzesTaken">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Questions Answered</div>
+            <div class="value" id="questionsAnswered">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Average Score</div>
+            <div class="value" id="averageScore">0%</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Best Score</div>
+            <div class="value" id="bestScore">0%</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Topics Practiced</div>
+            <div class="value" id="topicsPracticed">0</div>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-header">
+            <h3>Recent Attempts</h3>
+          </div>
+          <div id="recentAttempts"></div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-header">
+            <h3>Select Quiz Topic</h3>
+          </div>
+          <div class="topic-list" id="topicList"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="/js/app.js"></script>
+  </body>
+</html>

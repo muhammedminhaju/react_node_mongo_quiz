@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "question": "What is 12 × 8?",
+    "options": [
+      "84",
+      "96",
+      "108",
+      "92"
+    ],
+    "answer": "96",
+    "explanation": "Twelve times eight equals ninety-six."
+  },
+  {
+    "id": 2,
+    "question": "What is the value of π approximately?",
+    "options": [
+      "2.14",
+      "3.14",
+      "4.14",
+      "5.14"
+    ],
+    "answer": "3.14",
+    "explanation": "Pi is approximately 3.14159, often rounded to 3.14."
+  }
+]

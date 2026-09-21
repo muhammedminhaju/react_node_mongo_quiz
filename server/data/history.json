@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "question": "Who was the first President of India?",
+    "options": [
+      "Rajendra Prasad",
+      "Jawaharlal Nehru",
+      "Sardar Patel",
+      "B. R. Ambedkar"
+    ],
+    "answer": "Rajendra Prasad",
+    "explanation": "Dr. Rajendra Prasad was the first President of India."
+  },
+  {
+    "id": 2,
+    "question": "The Indian National Congress was founded in which year?",
+    "options": [
+      "1885",
+      "1892",
+      "1905",
+      "1857"
+    ],
+    "answer": "1885",
+    "explanation": "The Indian National Congress was founded in 1885."
+  },
+  {
+    "id": 3,
+    "question": "Who was the first Prime Minister of India?",
+    "options": [
+      "Sardar Patel",
+      "Jawaharlal Nehru",
+      "Rajendra Prasad",
+      "C. Rajagopalachari"
+    ],
+    "answer": "Jawaharlal Nehru",
+    "explanation": "Jawaharlal Nehru became the first Prime Minister of independent India."
+  },
+  {
+    "id": 4,
+    "question": "Which city is known as the Pink City of India?",
+    "options": [
+      "Jaipur",
+      "Jodhpur",
+      "Udaipur",
+      "Agra"
+    ],
+    "answer": "Jaipur",
+    "explanation": "Jaipur is famously called the Pink City because of its pink-hued buildings."
+  }
+]

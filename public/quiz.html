@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">Q</div>
+          <div>
+            <h2>Quiz App</h2>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="/">Dashboard</a>
+          <a href="/quiz" class="active">Quiz</a>
+          <a href="/revision">Revision</a>
+          <a href="/history">History</a>
+          <a href="/questions">Question Management</a>
+          <a href="/topics">Topics</a>
+          <a href="/settings">Settings</a>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="mobile-menu">☰</button>
+          <div class="topbar-title" id="quizTitle">Quiz</div>
+          <div class="topbar-actions">
+            <span class="score-pill" id="currentScorePill">Score: 0</span>
+          </div>
+        </header>
+
+        <section class="content-card quiz-card">
+          <div class="quiz-meta">
+            <div id="questionCounter">Question 0 / 0</div>
+            <div class="progress-bar"><span id="progressFill"></span></div>
+          </div>
+
+          <div class="question-wrap">
+            <h2 id="questionText">Loading question...</h2>
+            <div id="optionsContainer" class="options"></div>
+          </div>
+
+          <div class="quiz-controls">
+            <button class="btn btn-secondary" id="prevBtn">Previous</button>
+            <button class="btn btn-primary" id="nextBtn">Next</button>
+            <button class="btn btn-danger" id="submitBtn">Submit Quiz</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal hidden" id="submitModal">
+      <div class="modal-card">
+        <h3>Submit Quiz?</h3>
+        <p id="submitSummary">Are you sure you want to submit the quiz?</p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="cancelSubmitBtn">Cancel</button>
+          <button class="btn btn-danger" id="confirmSubmitBtn">Submit</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="/js/quiz.js"></script>
+  </body>
+</html>

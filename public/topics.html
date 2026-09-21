@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Topics</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">Q</div>
+          <div>
+            <h2>Quiz App</h2>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="/">Dashboard</a>
+          <a href="/quiz">Quiz</a>
+          <a href="/revision">Revision</a>
+          <a href="/history">History</a>
+          <a href="/questions">Question Management</a>
+          <a href="/topics" class="active">Topics</a>
+          <a href="/settings">Settings</a>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="mobile-menu">☰</button>
+          <div class="topbar-title">Topics</div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary" id="addTopicBtn">+ Add Topic</button>
+          </div>
+        </header>
+
+        <section class="content-card">
+          <div id="topicsList" class="topic-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal hidden" id="topicModal">
+      <div class="modal-card">
+        <h3>Create Topic</h3>
+        <form id="topicForm">
+          <div class="field-group">
+            <label>Topic Name</label>
+            <input id="topicNameInput" type="text" placeholder="Geography" required />
+          </div>
+          <div class="field-group">
+            <label>JSON File</label>
+            <input id="topicFileInput" type="text" placeholder="geography.json" required />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelTopicBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Topic</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="/js/topics.js"></script>
+  </body>
+</html>

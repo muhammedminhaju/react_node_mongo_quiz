@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "question": "What does CPU stand for?",
+    "options": [
+      "Central Process Unit",
+      "Central Processing Unit",
+      "Computer Processing Unit",
+      "Control Processing Unit"
+    ],
+    "answer": "Central Processing Unit",
+    "explanation": "CPU stands for Central Processing Unit and executes instructions."
+  },
+  {
+    "id": 2,
+    "question": "Which language is primarily used to style web pages?",
+    "options": [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Python"
+    ],
+    "answer": "CSS",
+    "explanation": "CSS is the styling language used to define layout, colors, and design."
+  }
+]

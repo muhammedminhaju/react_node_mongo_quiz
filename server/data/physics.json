@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "question": "What is the SI unit of force?",
+    "options": [
+      "Joule",
+      "Watt",
+      "Newton",
+      "Pascal"
+    ],
+    "answer": "Newton",
+    "explanation": "Force is measured in newtons (N), which is kg·m/s²."
+  },
+  {
+    "id": 2,
+    "question": "Which light phenomenon causes a rainbow?",
+    "options": [
+      "Refraction",
+      "Reflection",
+      "Diffraction",
+      "Absorption"
+    ],
+    "answer": "Refraction",
+    "explanation": "Rainbows are caused mainly by refraction and internal reflection of sunlight in raindrops."
+  }
+]

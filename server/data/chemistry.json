@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "question": "What is the chemical formula for water?",
+    "options": [
+      "CO2",
+      "H2O",
+      "O2",
+      "NaCl"
+    ],
+    "answer": "H2O",
+    "explanation": "Water is composed of two hydrogen atoms and one oxygen atom."
+  },
+  {
+    "id": 2,
+    "question": "Which gas do plants absorb from the atmosphere?",
+    "options": [
+      "Oxygen",
+      "Nitrogen",
+      "Carbon dioxide",
+      "Hydrogen"
+    ],
+    "answer": "Carbon dioxide",
+    "explanation": "Plants absorb carbon dioxide during photosynthesis."
+  }
+]

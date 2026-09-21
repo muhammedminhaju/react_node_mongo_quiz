@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Answers</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">Q</div>
+          <div>
+            <h2>Quiz App</h2>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <a href="/">Dashboard</a>
+          <a href="/quiz">Quiz</a>
+          <a href="/revision">Revision</a>
+          <a href="/history">History</a>
+          <a href="/questions">Question Management</a>
+          <a href="/topics">Topics</a>
+          <a href="/settings">Settings</a>
+        </nav>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="mobile-menu">☰</button>
+          <div class="topbar-title">Review Answers</div>
+        </header>
+        <section class="content-card">
+          <div id="reviewContainer"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="/js/review.js"></script>
+  </body>
+</html>
