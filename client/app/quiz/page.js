@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
 import Modal from '@/components/Modal';
-import { fetchQuestions } from '@/lib/api';
+import { createReview, fetchQuestions } from '@/lib/api';
 import { fisherYates, formatDuration, generateId } from '@/lib/quizUtils';
 import { loadSettings } from '@/lib/storage';
 
@@ -118,9 +118,12 @@ export default function QuizPage() {
   const [remainingSeconds, setRemainingSeconds] = useState(null);
   const autoSubmittedRef = useRef(false);
   const finishQuizRef = useRef(() => {});
+  const initializedRef = useRef(false);
 
   useEffect(() => {
     setSettings(loadSettings());
+    if (initializedRef.current) return;
+    initializedRef.current = true;
     ensureQuizLoaded().then(setState);
   }, []);
 
@@ -172,7 +175,12 @@ export default function QuizPage() {
   }
 
   function selectOption(option) {
-    const nextAnswers = { ...state.selectedAnswers, [currentIndex]: option };
+    const nextAnswers = { ...state.selectedAnswers };
+    if (nextAnswers[currentIndex] === option) {
+      delete nextAnswers[currentIndex];
+    } else {
+      nextAnswers[currentIndex] = option;
+    }
     updateState({ ...state, selectedAnswers: nextAnswers });
   }
 
@@ -242,6 +250,26 @@ export default function QuizPage() {
     localStorage.setItem('lastReviewData', JSON.stringify(reviewData));
     localStorage.removeItem(QUIZ_STATE_KEY);
     localStorage.removeItem('revisionQuizData');
+
+    createReview({
+      topic: result.topic,
+      totalQuestions,
+      correct,
+      wrong,
+      unanswered,
+      percentage,
+      timeTakenSeconds,
+      timerMinutes: result.timerMinutes,
+      questions: state.questions.map((q, index) => ({
+        id: q.id,
+        question: q.question,
+        options: q.options,
+        answer: q.answer,
+        explanation: q.explanation,
+        selectedAnswer: state.selectedAnswers[index] ?? null
+      }))
+    }).catch(() => {});
+
     router.push('/result');
   }
 

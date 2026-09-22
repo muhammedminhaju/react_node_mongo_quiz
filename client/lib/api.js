@@ -24,6 +24,17 @@ export async function createTopic({ name, fileName }) {
   return data;
 }
 
+export async function importTopic({ name, questions }) {
+  const response = await fetch('/api/topics/import', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, questions })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Unable to import topic.');
+  return data;
+}
+
 export async function renameTopic(topicName, payload) {
   const response = await fetch(`/api/topics/${encodeURIComponent(topicName)}`, {
     method: 'PUT',
@@ -72,5 +83,38 @@ export async function deleteQuestion(topic, id) {
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || 'Unable to delete question.');
+  return data;
+}
+
+export async function createReview(payload) {
+  const response = await fetch('/api/reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Unable to save quiz review.');
+  return data;
+}
+
+export async function fetchReviewTopics() {
+  const response = await fetch('/api/reviews/topics');
+  if (!response.ok) throw new Error('Unable to load topic reviews.');
+  return response.json();
+}
+
+export async function fetchReviews(topic) {
+  const query = topic ? `?topic=${encodeURIComponent(topic)}` : '';
+  const response = await fetch(`/api/reviews${query}`);
+  if (!response.ok) throw new Error('Unable to load reviews.');
+  return response.json();
+}
+
+export async function deleteReview(id) {
+  const response = await fetch(`/api/reviews/${encodeURIComponent(id)}`, {
+    method: 'DELETE'
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Unable to delete review.');
   return data;
 }

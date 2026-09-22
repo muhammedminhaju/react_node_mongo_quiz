@@ -1,17 +1,11 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { makeTopicKey, validateQuestion } = require('../utils/topicUtils');
+const { getTopicQuestionModel, topicCollectionExists } = require('../models/TopicQuestions');
 
 const router = express.Router();
 const dataDir = path.join(__dirname, '..', 'data');
-
-function makeTopicKey(value) {
-  return String(value || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-}
 
 function ensureDataDir() {
   if (!fs.existsSync(dataDir)) {
@@ -43,52 +37,22 @@ function readQuestions(topic) {
   }
 }
 
-function validateQuestion(question, topic) {
-  if (!question || typeof question !== 'object') {
-    return 'Invalid question data.';
-  }
-
-  if (!topic || !makeTopicKey(topic)) {
-    return 'Topic is required.';
-  }
-
-  const trimmedQuestion = String(question.question || '').trim();
-  if (!trimmedQuestion) {
-    return 'Question text is required.';
-  }
-
-  const options = Array.isArray(question.options) ? question.options.map((item) => String(item || '').trim()) : [];
-  if (options.length !== 4 || options.some((option) => !option)) {
-    return 'All four options are required.';
-  }
-
-  if (new Set(options).size !== 4) {
-    return 'Options must be unique.';
-  }
-
-  const answer = String(question.answer || '').trim();
-  if (!answer || !options.includes(answer)) {
-    return 'Correct answer must match one of the provided options.';
-  }
-
-  if (question.explanation !== undefined && typeof question.explanation !== 'string') {
-    return 'Explanation must be a string.';
-  }
-
-  return null;
-}
-
-router.get('/:topic', (req, res) => {
+router.get('/:topic', async (req, res) => {
   const topic = makeTopicKey(req.params.topic);
   if (!topic) {
     return res.status(400).json({ error: 'Topic is required.' });
+  }
+
+  if (await topicCollectionExists(topic)) {
+    const docs = await getTopicQuestionModel(topic).find().lean();
+    return res.json(docs.map(({ _id, __v, ...rest }) => rest));
   }
 
   const questions = readQuestions(topic);
   return res.json(questions);
 });
 
-router.post('/:topic', (req, res) => {
+router.post('/:topic', async (req, res) => {
   const topic = makeTopicKey(req.params.topic);
   if (!topic) {
     return res.status(400).json({ error: 'Topic is required.' });
@@ -99,15 +63,25 @@ router.post('/:topic', (req, res) => {
     return res.status(400).json({ error: validationError });
   }
 
-  const questions = readQuestions(topic);
-  const nextId = questions.reduce((max, current) => Math.max(max, Number(current.id) || 0), 0) + 1;
-  const newQuestion = {
-    id: nextId,
+  const newQuestionData = {
     question: String(req.body.question).trim(),
     options: Array.isArray(req.body.options) ? req.body.options.map((option) => String(option).trim()) : [],
     answer: String(req.body.answer).trim(),
     explanation: req.body.explanation !== undefined ? String(req.body.explanation).trim() : ''
   };
+
+  if (await topicCollectionExists(topic)) {
+    const Model = getTopicQuestionModel(topic);
+    const existing = await Model.find().lean();
+    const nextId = existing.reduce((max, current) => Math.max(max, Number(current.id) || 0), 0) + 1;
+    const created = await Model.create({ id: nextId, ...newQuestionData });
+    const { _id, __v, ...plain } = created.toObject();
+    return res.status(201).json(plain);
+  }
+
+  const questions = readQuestions(topic);
+  const nextId = questions.reduce((max, current) => Math.max(max, Number(current.id) || 0), 0) + 1;
+  const newQuestion = { id: nextId, ...newQuestionData };
 
   const filePath = getFilePath(topic);
   questions.push(newQuestion);
@@ -115,7 +89,7 @@ router.post('/:topic', (req, res) => {
   res.status(201).json(newQuestion);
 });
 
-router.put('/:topic/:id', (req, res) => {
+router.put('/:topic/:id', async (req, res) => {
   const topic = makeTopicKey(req.params.topic);
   const id = Number(req.params.id);
   if (!topic || Number.isNaN(id)) {
@@ -125,6 +99,23 @@ router.put('/:topic/:id', (req, res) => {
   const validationError = validateQuestion(req.body, topic);
   if (validationError) {
     return res.status(400).json({ error: validationError });
+  }
+
+  const updatedData = {
+    question: String(req.body.question).trim(),
+    options: Array.isArray(req.body.options) ? req.body.options.map((option) => String(option).trim()) : [],
+    answer: String(req.body.answer).trim(),
+    explanation: req.body.explanation !== undefined ? String(req.body.explanation).trim() : ''
+  };
+
+  if (await topicCollectionExists(topic)) {
+    const Model = getTopicQuestionModel(topic);
+    const updated = await Model.findOneAndUpdate({ id }, updatedData, { new: true }).lean();
+    if (!updated) {
+      return res.status(404).json({ error: 'Question not found.' });
+    }
+    const { _id, __v, ...plain } = updated;
+    return res.json(plain);
   }
 
   const questions = readQuestions(topic);
@@ -133,25 +124,26 @@ router.put('/:topic/:id', (req, res) => {
     return res.status(404).json({ error: 'Question not found.' });
   }
 
-  const updatedQuestion = {
-    ...questions[index],
-    question: String(req.body.question).trim(),
-    options: Array.isArray(req.body.options) ? req.body.options.map((option) => String(option).trim()) : [],
-    answer: String(req.body.answer).trim(),
-    explanation: req.body.explanation !== undefined ? String(req.body.explanation).trim() : ''
-  };
-
+  const updatedQuestion = { ...questions[index], ...updatedData };
   questions[index] = updatedQuestion;
   fs.writeFileSync(getFilePath(topic), JSON.stringify(questions, null, 2), 'utf8');
   res.json(updatedQuestion);
 });
 
-router.delete('/:topic/:id', (req, res) => {
+router.delete('/:topic/:id', async (req, res) => {
   const topic = makeTopicKey(req.params.topic);
   const id = Number(req.params.id);
 
   if (!topic || Number.isNaN(id)) {
     return res.status(400).json({ error: 'Invalid topic or question id.' });
+  }
+
+  if (await topicCollectionExists(topic)) {
+    const result = await getTopicQuestionModel(topic).deleteOne({ id });
+    if (!result.deletedCount) {
+      return res.status(404).json({ error: 'Question not found.' });
+    }
+    return res.json({ message: 'Question deleted successfully.' });
   }
 
   const filePath = getFilePath(topic);

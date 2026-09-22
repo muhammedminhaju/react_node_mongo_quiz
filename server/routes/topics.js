@@ -1,6 +1,9 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { makeTopicKey, validateQuestion } = require('../utils/topicUtils');
+const { getTopicQuestionModel, listMongoTopicKeys, dropTopicCollection } = require('../models/TopicQuestions');
+const mongoose = require('mongoose');
 
 const router = express.Router();
 const dataDir = path.join(__dirname, '..', 'data');
@@ -48,9 +51,62 @@ function resolveTopicFile(topicName) {
   return path.join(dataDir, fileName);
 }
 
-router.get('/', (req, res) => {
-  const topics = readTopicList();
-  res.json(topics.map((topic) => topic.name));
+router.get('/', async (req, res) => {
+  const fileTopics = getTopicFiles();
+  const mongoTopics = await listMongoTopicKeys();
+  const merged = Array.from(new Set([...fileTopics, ...mongoTopics]));
+  res.json(merged);
+});
+
+router.post('/import', async (req, res) => {
+  const { name, questions } = req.body || {};
+  const label = String(name || '').trim();
+
+  if (!label) {
+    return res.status(400).json({ error: 'Topic name is required.' });
+  }
+
+  const topicKey = makeTopicKey(label);
+  if (!topicKey) {
+    return res.status(400).json({ error: 'Topic name contains unsupported characters.' });
+  }
+
+  if (!Array.isArray(questions) || !questions.length) {
+    return res.status(400).json({ error: 'The file must contain a non-empty array of questions.' });
+  }
+
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ error: 'MongoDB is not connected. Cannot import topic.' });
+  }
+
+  for (let i = 0; i < questions.length; i += 1) {
+    const validationError = validateQuestion(questions[i], topicKey);
+    if (validationError) {
+      return res.status(400).json({ error: `Question ${i + 1}: ${validationError}` });
+    }
+  }
+
+  try {
+    const Model = getTopicQuestionModel(topicKey);
+    const docs = questions.map((question, index) => ({
+      id: question.id ?? index + 1,
+      question: String(question.question).trim(),
+      options: question.options.map((option) => String(option).trim()),
+      answer: String(question.answer).trim(),
+      explanation: question.explanation !== undefined ? String(question.explanation).trim() : ''
+    }));
+
+    await Model.deleteMany({});
+    await Model.insertMany(docs);
+
+    res.status(201).json({
+      message: 'Topic imported successfully.',
+      topic: { name: topicKey, label },
+      count: docs.length
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Unable to import topic into MongoDB.' });
+  }
 });
 
 router.post('/', (req, res) => {
@@ -150,20 +206,26 @@ router.put('/:name', (req, res) => {
   }
 });
 
-router.delete('/:name', (req, res) => {
+router.delete('/:name', async (req, res) => {
   const currentTopic = String(req.params.name || '').trim();
 
   if (!currentTopic) {
     return res.status(400).json({ error: 'Topic name is required.' });
   }
 
+  const topicKey = makeTopicKey(currentTopic);
   const sourcePath = resolveTopicFile(currentTopic);
-  if (!sourcePath || !fs.existsSync(sourcePath)) {
+  const fileExists = Boolean(sourcePath && fs.existsSync(sourcePath));
+  const mongoExisted = await dropTopicCollection(topicKey);
+
+  if (!fileExists && !mongoExisted) {
     return res.status(404).json({ error: 'Topic not found.' });
   }
 
   try {
-    fs.unlinkSync(sourcePath);
+    if (fileExists) {
+      fs.unlinkSync(sourcePath);
+    }
     res.json({ message: 'Topic deleted successfully.' });
   } catch (error) {
     return res.status(500).json({ error: 'Unable to delete topic.' });

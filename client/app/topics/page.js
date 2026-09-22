@@ -3,9 +3,18 @@
 import { useEffect, useState } from 'react';
 import AppShell from '@/components/AppShell';
 import Modal from '@/components/Modal';
-import { createTopic, deleteTopic, fetchTopics, renameTopic } from '@/lib/api';
+import { createTopic, deleteTopic, fetchTopics, importTopic, renameTopic } from '@/lib/api';
 import { slugifyTopicLabel } from '@/lib/quizUtils';
 import { useToast } from '@/lib/useToast';
+
+function labelFromFileName(fileName) {
+  const base = fileName.replace(/\.json$/i, '');
+  return base
+    .split(/[-_\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
 
 export default function TopicsPage() {
   const { message, showToast } = useToast();
@@ -13,6 +22,10 @@ export default function TopicsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [nameInput, setNameInput] = useState('');
   const [fileInput, setFileInput] = useState('');
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [importPreview, setImportPreview] = useState(null);
+  const [importLabel, setImportLabel] = useState('');
+  const [importing, setImporting] = useState(false);
 
   async function loadTopics() {
     try {
@@ -88,6 +101,71 @@ export default function TopicsPage() {
     }
   }
 
+  function readTopicFile(file) {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.json')) {
+      showToast('Please drop a .json file.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed;
+      try {
+        parsed = JSON.parse(reader.result);
+      } catch (error) {
+        showToast('That file is not valid JSON.');
+        return;
+      }
+
+      if (!Array.isArray(parsed) || !parsed.length) {
+        showToast('The file must contain a non-empty array of questions.');
+        return;
+      }
+
+      setImportPreview(parsed);
+      setImportLabel(labelFromFileName(file.name));
+    };
+    reader.onerror = () => showToast('Unable to read the file.');
+    reader.readAsText(file);
+  }
+
+  function handleDrop(event) {
+    event.preventDefault();
+    setIsDragOver(false);
+    readTopicFile(event.dataTransfer.files?.[0]);
+  }
+
+  function handleFilePick(event) {
+    readTopicFile(event.target.files?.[0]);
+    event.target.value = '';
+  }
+
+  function cancelImport() {
+    setImportPreview(null);
+    setImportLabel('');
+  }
+
+  async function confirmImport() {
+    const label = importLabel.trim();
+    if (!label) {
+      showToast('Topic name is required.');
+      return;
+    }
+
+    setImporting(true);
+    try {
+      const result = await importTopic({ name: label, questions: importPreview });
+      showToast(`Imported ${result.count} questions into MongoDB.`);
+      cancelImport();
+      loadTopics();
+    } catch (error) {
+      showToast(error.message || 'Unable to import topic.');
+    } finally {
+      setImporting(false);
+    }
+  }
+
   return (
     <AppShell
       title="Topics"
@@ -97,6 +175,25 @@ export default function TopicsPage() {
         </button>
       }
     >
+      <section className="content-card">
+        <div className="section-header">
+          <h3>Import Topic from JSON</h3>
+        </div>
+        <label
+          className={`dropzone${isDragOver ? ' dragover' : ''}`}
+          onDragOver={(event) => {
+            event.preventDefault();
+            setIsDragOver(true);
+          }}
+          onDragLeave={() => setIsDragOver(false)}
+          onDrop={handleDrop}
+        >
+          <input type="file" accept=".json,application/json" onChange={handleFilePick} hidden />
+          <span>Drag &amp; drop a topic .json file here, or click to browse</span>
+          <small>Imported questions are stored in a dedicated MongoDB collection for that topic.</small>
+        </label>
+      </section>
+
       <section className="content-card">
         <div className="topic-list">
           {topics === null ? null : topics.length === 0 ? (
@@ -161,6 +258,28 @@ export default function TopicsPage() {
             </button>
           </div>
         </form>
+      </Modal>
+
+      <Modal open={Boolean(importPreview)}>
+        <h3>Import Topic</h3>
+        <p>{importPreview?.length || 0} questions found in the file.</p>
+        <div className="field-group">
+          <label>Topic Name</label>
+          <input
+            type="text"
+            placeholder="Geography"
+            value={importLabel}
+            onChange={(event) => setImportLabel(event.target.value)}
+          />
+        </div>
+        <div className="modal-actions">
+          <button type="button" className="btn btn-secondary" onClick={cancelImport} disabled={importing}>
+            Cancel
+          </button>
+          <button type="button" className="btn btn-primary" onClick={confirmImport} disabled={importing}>
+            {importing ? 'Importing...' : 'Import to MongoDB'}
+          </button>
+        </div>
       </Modal>
 
       <div className={`toast${message ? ' show' : ''}`}>{message}</div>
