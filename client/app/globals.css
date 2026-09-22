@@ -370,11 +370,37 @@ button, input, textarea, select {
 
 .modal-card {
   width: min(90vw, 440px);
+  max-height: 85vh;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 24px;
   box-shadow: var(--shadow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-card-body {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--muted, #6b7280);
+  padding: 4px 8px;
+}
+
+.modal-close:hover {
+  color: var(--danger);
 }
 
 .wide-modal {

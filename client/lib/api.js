@@ -77,6 +77,17 @@ export async function updateQuestion(topic, id, payload) {
   return data;
 }
 
+export async function importQuestions(topic, questions) {
+  const response = await fetch(`/api/questions/${encodeURIComponent(topic)}/import`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ questions })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Unable to import questions.');
+  return data;
+}
+
 export async function deleteQuestion(topic, id) {
   const response = await fetch(`/api/questions/${encodeURIComponent(topic)}/${id}`, {
     method: 'DELETE'

@@ -2,8 +2,13 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { makeTopicKey, validateQuestion } = require('../utils/topicUtils');
-const { getTopicQuestionModel, listMongoTopicKeys, dropTopicCollection } = require('../models/TopicQuestions');
-const mongoose = require('mongoose');
+const {
+  replaceTopicQuestions,
+  listMongoTopicKeys,
+  dropTopicCollection,
+  renameTopicCollection,
+  isMongoConnected
+} = require('../models/TopicQuestions');
 
 const router = express.Router();
 const dataDir = path.join(__dirname, '..', 'data');
@@ -27,18 +32,6 @@ function getTopicFiles() {
     .filter((file) => file.toLowerCase().endsWith('.json'))
     .map((file) => file.replace(/\.json$/, ''))
     .filter((name) => name && name !== 'topics');
-}
-
-function readTopicList() {
-  const topicNames = getTopicFiles();
-  return topicNames.map((name) => {
-    const label = name
-      .split('_')
-      .filter(Boolean)
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(' ');
-    return { name, label };
-  });
 }
 
 function resolveTopicFile(topicName) {
@@ -75,10 +68,6 @@ router.post('/import', async (req, res) => {
     return res.status(400).json({ error: 'The file must contain a non-empty array of questions.' });
   }
 
-  if (mongoose.connection.readyState !== 1) {
-    return res.status(503).json({ error: 'MongoDB is not connected. Cannot import topic.' });
-  }
-
   for (let i = 0; i < questions.length; i += 1) {
     const validationError = validateQuestion(questions[i], topicKey);
     if (validationError) {
@@ -86,26 +75,30 @@ router.post('/import', async (req, res) => {
     }
   }
 
-  try {
-    const Model = getTopicQuestionModel(topicKey);
-    const docs = questions.map((question, index) => ({
-      id: question.id ?? index + 1,
-      question: String(question.question).trim(),
-      options: question.options.map((option) => String(option).trim()),
-      answer: String(question.answer).trim(),
-      explanation: question.explanation !== undefined ? String(question.explanation).trim() : ''
-    }));
+  const docs = questions.map((question, index) => ({
+    id: question.id ?? index + 1,
+    question: String(question.question).trim(),
+    options: question.options.map((option) => String(option).trim()),
+    answer: String(question.answer).trim(),
+    explanation: question.explanation !== undefined ? String(question.explanation).trim() : ''
+  }));
 
-    await Model.deleteMany({});
-    await Model.insertMany(docs);
+  try {
+    fs.writeFileSync(path.join(dataDir, `${topicKey}.json`), JSON.stringify(docs, null, 2), 'utf8');
+
+    let storedIn = 'a JSON file';
+    if (isMongoConnected()) {
+      await replaceTopicQuestions(topicKey, docs);
+      storedIn = 'MongoDB and a JSON file';
+    }
 
     res.status(201).json({
-      message: 'Topic imported successfully.',
+      message: `Topic imported successfully into ${storedIn}.`,
       topic: { name: topicKey, label },
       count: docs.length
     });
   } catch (error) {
-    res.status(500).json({ error: 'Unable to import topic into MongoDB.' });
+    res.status(500).json({ error: 'Unable to import topic.' });
   }
 });
 
@@ -151,7 +144,7 @@ router.post('/', (req, res) => {
   }
 });
 
-router.put('/:name', (req, res) => {
+router.put('/:name', async (req, res) => {
   const currentTopic = String(req.params.name || '').trim();
 
   if (!currentTopic) {
@@ -192,6 +185,7 @@ router.put('/:name', (req, res) => {
   try {
     if (sourcePath !== targetPath) {
       fs.renameSync(sourcePath, targetPath);
+      await renameTopicCollection(makeTopicKey(currentTopic), nextTopicKey);
     }
 
     res.json({

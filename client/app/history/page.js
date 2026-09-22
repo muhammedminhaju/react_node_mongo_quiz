@@ -91,7 +91,7 @@ export default function HistoryPage() {
         </table>
       </section>
 
-      <Modal open={Boolean(detailEntry)} wide>
+      <Modal open={Boolean(detailEntry)} wide onClose={() => setDetailEntry(null)}>
         <h3>Quiz Result Details</h3>
         {detailEntry && (
           <div className="detail-box">

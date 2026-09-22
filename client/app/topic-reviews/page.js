@@ -128,7 +128,7 @@ export default function TopicReviewsPage() {
         </section>
       )}
 
-      <Modal open={Boolean(detailReview)} wide>
+      <Modal open={Boolean(detailReview)} wide onClose={() => setDetailReview(null)}>
         <h3>Attempt Review</h3>
         {detailReview && (
           <div className="detail-box">

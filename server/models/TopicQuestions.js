@@ -65,9 +65,46 @@ async function dropTopicCollection(topicKey) {
   return true;
 }
 
+async function renameTopicCollection(oldTopicKey, newTopicKey) {
+  if (mongoose.connection.readyState !== 1 || oldTopicKey === newTopicKey) {
+    return false;
+  }
+  const exists = await topicCollectionExists(oldTopicKey);
+  if (!exists) {
+    return false;
+  }
+  await mongoose.connection.db.renameCollection(
+    collectionNameForTopic(oldTopicKey),
+    collectionNameForTopic(newTopicKey),
+    { dropTarget: true }
+  );
+  modelCache.delete(collectionNameForTopic(oldTopicKey));
+  modelCache.delete(collectionNameForTopic(newTopicKey));
+  return true;
+}
+
+function isMongoConnected() {
+  return mongoose.connection.readyState === 1;
+}
+
+async function replaceTopicQuestions(topicKey, questions) {
+  if (!isMongoConnected()) {
+    return false;
+  }
+  const Model = getTopicQuestionModel(topicKey);
+  await Model.deleteMany({});
+  if (questions.length) {
+    await Model.insertMany(questions);
+  }
+  return true;
+}
+
 module.exports = {
   getTopicQuestionModel,
   topicCollectionExists,
   listMongoTopicKeys,
-  dropTopicCollection
+  dropTopicCollection,
+  renameTopicCollection,
+  replaceTopicQuestions,
+  isMongoConnected
 };

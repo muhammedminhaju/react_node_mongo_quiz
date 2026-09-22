@@ -156,7 +156,7 @@ export default function TopicsPage() {
     setImporting(true);
     try {
       const result = await importTopic({ name: label, questions: importPreview });
-      showToast(`Imported ${result.count} questions into MongoDB.`);
+      showToast(result.message || `Imported ${result.count} questions.`);
       cancelImport();
       loadTopics();
     } catch (error) {
@@ -190,7 +190,7 @@ export default function TopicsPage() {
         >
           <input type="file" accept=".json,application/json" onChange={handleFilePick} hidden />
           <span>Drag &amp; drop a topic .json file here, or click to browse</span>
-          <small>Imported questions are stored in a dedicated MongoDB collection for that topic.</small>
+          <small>Saved to a JSON file, and mirrored into MongoDB automatically when it's connected.</small>
         </label>
       </section>
 

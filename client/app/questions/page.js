@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import AppShell from '@/components/AppShell';
 import Modal from '@/components/Modal';
-import { createQuestion, deleteQuestion, fetchQuestions, fetchTopics, updateQuestion } from '@/lib/api';
+import { createQuestion, deleteQuestion, fetchQuestions, fetchTopics, importQuestions, updateQuestion } from '@/lib/api';
 import { useToast } from '@/lib/useToast';
 
 const emptyForm = { question: '', optionA: '', optionB: '', optionC: '', optionD: '', explanation: '', answer: '' };
@@ -29,6 +29,9 @@ export default function QuestionsPage() {
   const [form, setForm] = useState(emptyForm);
   const [formTopic, setFormTopic] = useState('');
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [importPreview, setImportPreview] = useState(null);
+  const [importing, setImporting] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -161,6 +164,64 @@ export default function QuestionsPage() {
     }
   }
 
+  function readImportFile(file) {
+    if (!file) return;
+    if (!topicFilter) {
+      showToast('Select a topic first.');
+      return;
+    }
+    if (!file.name.toLowerCase().endsWith('.json')) {
+      showToast('Please drop a .json file.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed;
+      try {
+        parsed = JSON.parse(reader.result);
+      } catch (error) {
+        showToast('That file is not valid JSON.');
+        return;
+      }
+
+      if (!Array.isArray(parsed) || !parsed.length) {
+        showToast('The file must contain a non-empty array of questions.');
+        return;
+      }
+
+      setImportPreview(parsed);
+    };
+    reader.onerror = () => showToast('Unable to read the file.');
+    reader.readAsText(file);
+  }
+
+  function handleImportDrop(event) {
+    event.preventDefault();
+    setIsDragOver(false);
+    readImportFile(event.dataTransfer.files?.[0]);
+  }
+
+  function handleImportFilePick(event) {
+    readImportFile(event.target.files?.[0]);
+    event.target.value = '';
+  }
+
+  async function confirmImportAppend() {
+    setImporting(true);
+    try {
+      const result = await importQuestions(topicFilter, importPreview);
+      showToast(result.message || `Appended ${result.added} questions.`);
+      setImportPreview(null);
+      const refreshed = await fetchQuestions(topicFilter);
+      setRows(refreshed);
+    } catch (error) {
+      showToast(error.message || 'Unable to import questions.');
+    } finally {
+      setImporting(false);
+    }
+  }
+
   return (
     <AppShell
       title="Question Management"
@@ -197,6 +258,20 @@ export default function QuestionsPage() {
             />
           </div>
         </div>
+
+        <label
+          className={`dropzone${isDragOver ? ' dragover' : ''}`}
+          onDragOver={(event) => {
+            event.preventDefault();
+            setIsDragOver(true);
+          }}
+          onDragLeave={() => setIsDragOver(false)}
+          onDrop={handleImportDrop}
+        >
+          <input type="file" accept=".json,application/json" onChange={handleImportFilePick} hidden />
+          <span>Drag &amp; drop a .json file to append questions to this topic, or click to browse</span>
+          <small>Saved to the JSON file, and mirrored into MongoDB automatically when it's connected.</small>
+        </label>
 
         <div className="table-wrap">
           <table className="data-table">
@@ -313,6 +388,27 @@ export default function QuestionsPage() {
           </button>
           <button className="btn btn-danger" onClick={confirmDelete}>
             Delete
+          </button>
+        </div>
+      </Modal>
+
+      <Modal open={Boolean(importPreview)}>
+        <h3>Append Questions</h3>
+        <p>
+          {importPreview?.length || 0} questions found in the file. They will be appended to{' '}
+          <strong>{topics.find((topic) => topic.name === topicFilter)?.label || topicFilter}</strong>.
+        </p>
+        <div className="modal-actions">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setImportPreview(null)}
+            disabled={importing}
+          >
+            Cancel
+          </button>
+          <button type="button" className="btn btn-primary" onClick={confirmImportAppend} disabled={importing}>
+            {importing ? 'Importing...' : 'Append Questions'}
           </button>
         </div>
       </Modal>
