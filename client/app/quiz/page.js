@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
 import Modal from '@/components/Modal';
 import { fetchQuestions } from '@/lib/api';
-import { fisherYates, generateId } from '@/lib/quizUtils';
+import { fisherYates, formatDuration, generateId } from '@/lib/quizUtils';
 import { loadSettings } from '@/lib/storage';
 
 const QUIZ_STATE_KEY = 'quizTempState';
@@ -32,6 +32,10 @@ function normalizeQuestion(question) {
 }
 
 async function ensureQuizLoaded() {
+  const timerMinutesRaw = localStorage.getItem('quizTimerMinutes');
+  localStorage.removeItem('quizTimerMinutes');
+  const requestedTimerMinutes = timerMinutesRaw ? Number(timerMinutesRaw) : null;
+
   const savedState = loadQuizState();
   if (savedState && Array.isArray(savedState.questions) && savedState.questions.length) {
     return savedState;
@@ -68,13 +72,19 @@ async function ensureQuizLoaded() {
       }))
       .slice(0, totalQuestions);
 
+    const timerEndsAt = requestedTimerMinutes
+      ? new Date(Date.now() + requestedTimerMinutes * 60000).toISOString()
+      : null;
+
     const state = {
       topic: selected,
       questions: prepared,
       currentIndex: 0,
       selectedAnswers: {},
       startedAt: new Date().toISOString(),
-      mode: 'standard'
+      mode: 'standard',
+      timerMinutes: requestedTimerMinutes,
+      timerEndsAt
     };
     saveQuizState(state);
     return state;
@@ -105,11 +115,40 @@ export default function QuizPage() {
   const [state, setState] = useState(null);
   const [settings, setSettings] = useState({});
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
+  const [remainingSeconds, setRemainingSeconds] = useState(null);
+  const autoSubmittedRef = useRef(false);
+  const finishQuizRef = useRef(() => {});
 
   useEffect(() => {
     setSettings(loadSettings());
     ensureQuizLoaded().then(setState);
   }, []);
+
+  useEffect(() => {
+    finishQuizRef.current = finishQuiz;
+  });
+
+  useEffect(() => {
+    if (!state?.timerEndsAt) {
+      setRemainingSeconds(null);
+      return undefined;
+    }
+
+    autoSubmittedRef.current = false;
+
+    function tick() {
+      const secondsLeft = Math.round((new Date(state.timerEndsAt).getTime() - Date.now()) / 1000);
+      setRemainingSeconds(Math.max(0, secondsLeft));
+      if (secondsLeft <= 0 && !autoSubmittedRef.current) {
+        autoSubmittedRef.current = true;
+        finishQuizRef.current();
+      }
+    }
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [state?.timerEndsAt]);
 
   if (!state || !Array.isArray(state.questions) || !state.questions.length) {
     return (
@@ -171,6 +210,9 @@ export default function QuizPage() {
     }, 0);
     const unanswered = totalQuestions - correct - wrong;
     const percentage = totalQuestions ? Math.round((correct / totalQuestions) * 100) : 0;
+    const timeTakenSeconds = state.startedAt
+      ? Math.max(0, Math.round((Date.now() - new Date(state.startedAt).getTime()) / 1000))
+      : null;
 
     const result = {
       id: generateId(),
@@ -181,7 +223,9 @@ export default function QuizPage() {
       wrong,
       unanswered,
       percentage,
-      score: `${correct}/${totalQuestions}`
+      score: `${correct}/${totalQuestions}`,
+      timeTakenSeconds,
+      timerMinutes: state.timerMinutes || null
     };
 
     const reviewData = {
@@ -207,7 +251,14 @@ export default function QuizPage() {
   return (
     <AppShell
       title={`${state.topic || 'Quiz'} Quiz`}
-      actions={<span className="score-pill">Score: {score}</span>}
+      actions={
+        <>
+          {remainingSeconds !== null && (
+            <span className={`timer-pill${remainingSeconds <= 30 ? ' low' : ''}`}>⏱ {formatDuration(remainingSeconds)}</span>
+          )}
+          <span className="score-pill">Score: {score}</span>
+        </>
+      }
     >
       <section className="content-card quiz-card">
         <div className="quiz-meta">

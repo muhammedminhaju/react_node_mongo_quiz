@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import AppShell from '@/components/AppShell';
 import Modal from '@/components/Modal';
 import { getLocalHistory, setLocalHistory } from '@/lib/storage';
+import { formatDuration } from '@/lib/quizUtils';
 import { useToast } from '@/lib/useToast';
 
 export default function HistoryPage() {
@@ -54,13 +55,14 @@ export default function HistoryPage() {
               <th>Date</th>
               <th>Score</th>
               <th>Percentage</th>
+              <th>Time Taken</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {history.length === 0 ? (
               <tr>
-                <td colSpan={5} className="empty-state">
+                <td colSpan={6} className="empty-state">
                   No quiz history yet.
                 </td>
               </tr>
@@ -73,6 +75,7 @@ export default function HistoryPage() {
                     {entry.correct}/{entry.totalQuestions}
                   </td>
                   <td>{entry.percentage}%</td>
+                  <td>{formatDuration(entry.timeTakenSeconds)}</td>
                   <td>
                     <button className="table-action view" onClick={() => setDetailEntry(entry)}>
                       View
@@ -112,6 +115,10 @@ export default function HistoryPage() {
             </p>
             <p>
               <strong>Unanswered:</strong> {detailEntry.unanswered}
+            </p>
+            <p>
+              <strong>Time Taken:</strong> {formatDuration(detailEntry.timeTakenSeconds)}
+              {detailEntry.timerMinutes ? ` (limit: ${detailEntry.timerMinutes} min)` : ''}
             </p>
           </div>
         )}

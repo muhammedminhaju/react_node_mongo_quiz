@@ -52,6 +52,19 @@ export function slugifyTopicLabel(value) {
   );
 }
 
+export function formatDuration(totalSeconds) {
+  if (totalSeconds === null || totalSeconds === undefined || Number.isNaN(totalSeconds)) return '--';
+  const clamped = Math.max(0, Math.round(totalSeconds));
+  const hours = Math.floor(clamped / 3600);
+  const minutes = Math.floor((clamped % 3600) / 60);
+  const seconds = clamped % 60;
+
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
 export function formatDate(dateString) {
   const date = new Date(dateString);
   return new Intl.DateTimeFormat('en-GB', {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
+import Modal from '@/components/Modal';
 import { fetchTopics } from '@/lib/api';
 import { getLocalHistory } from '@/lib/storage';
 import { useToast } from '@/lib/useToast';
@@ -19,6 +20,8 @@ export default function DashboardPage() {
     uniqueTopics: 0
   });
   const [recent, setRecent] = useState([]);
+  const [timerModalTopic, setTimerModalTopic] = useState(null);
+  const [timerInput, setTimerInput] = useState('');
 
   useEffect(() => {
     fetchTopics()
@@ -41,16 +44,38 @@ export default function DashboardPage() {
   }, []);
 
   function handleTopicClick(topicName) {
-    localStorage.setItem('selectedTopic', topicName);
-    localStorage.removeItem('quizTempState');
-    router.push('/quiz');
+    setTimerModalTopic(topicName);
+    setTimerInput('');
   }
 
   function handleStartQuickQuiz() {
     const fallbackTopic = localStorage.getItem('selectedTopic') || 'history';
-    localStorage.setItem('selectedTopic', fallbackTopic);
+    setTimerModalTopic(fallbackTopic);
+    setTimerInput('');
+  }
+
+  function closeTimerModal() {
+    setTimerModalTopic(null);
+    setTimerInput('');
+  }
+
+  function confirmStartQuiz() {
+    const topicName = timerModalTopic;
+    const trimmed = timerInput.trim();
+    const minutes = trimmed ? Math.max(1, Math.round(Number(trimmed))) : null;
+
+    localStorage.setItem('selectedTopic', topicName);
+    localStorage.removeItem('quizTempState');
+    if (minutes) {
+      localStorage.setItem('quizTimerMinutes', String(minutes));
+    } else {
+      localStorage.removeItem('quizTimerMinutes');
+    }
+
     router.push('/quiz');
   }
+
+  const timerModalLabel = topics.find((topic) => topic.name === timerModalTopic)?.label || timerModalTopic;
 
   return (
     <AppShell
@@ -115,6 +140,31 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
+
+      <Modal open={Boolean(timerModalTopic)}>
+        <h3>Start Quiz</h3>
+        <p>
+          Topic: <strong>{timerModalLabel}</strong>
+        </p>
+        <div className="field-group">
+          <label>Timer (minutes)</label>
+          <input
+            type="number"
+            min="1"
+            placeholder="No timer"
+            value={timerInput}
+            onChange={(event) => setTimerInput(event.target.value)}
+          />
+        </div>
+        <div className="modal-actions">
+          <button className="btn btn-secondary" onClick={closeTimerModal}>
+            Cancel
+          </button>
+          <button className="btn btn-primary" onClick={confirmStartQuiz}>
+            Start Quiz
+          </button>
+        </div>
+      </Modal>
 
       <div className={`toast${message ? ' show' : ''}`}>{message}</div>
     </AppShell>

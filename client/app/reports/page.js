@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 import AppShell from '@/components/AppShell';
 import { getLocalHistory } from '@/lib/storage';
+import { formatDuration } from '@/lib/quizUtils';
 import {
   filterHistory,
   computeSummary,
@@ -62,7 +63,7 @@ function TopicTooltip({ active, payload }) {
     <div className="chart-tooltip">
       <div className="tooltip-value">{point.avgPercentage}%</div>
       <div className="tooltip-label">
-        {point.label} &middot; {point.attempts} attempt{point.attempts === 1 ? '' : 's'}
+        {point.label} &middot; {point.attempts} attempt{point.attempts === 1 ? '' : 's'} &middot; avg {formatDuration(point.avgTimeSeconds)}
       </div>
     </div>
   );
@@ -185,6 +186,10 @@ export default function ReportsPage() {
               <div className="label">Best Score</div>
               <div className="value">{summary.bestPercentage}%</div>
             </div>
+            <div className="stat-card">
+              <div className="label">Avg. Time per Quiz</div>
+              <div className="value">{formatDuration(summary.averageTimeSeconds)}</div>
+            </div>
           </section>
 
           <section className="content-card">
@@ -268,6 +273,7 @@ export default function ReportsPage() {
                         <th>Topic</th>
                         <th>Attempts</th>
                         <th>Avg. Score</th>
+                        <th>Avg. Time</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -276,6 +282,7 @@ export default function ReportsPage() {
                           <td>{item.label}</td>
                           <td>{item.attempts}</td>
                           <td>{item.avgPercentage}%</td>
+                          <td>{formatDuration(item.avgTimeSeconds)}</td>
                         </tr>
                       ))}
                     </tbody>

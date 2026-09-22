@@ -316,6 +316,23 @@ button, input, textarea, select {
   font-weight: 700;
 }
 
+.timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(231, 76, 60, 0.12);
+  color: var(--danger);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-pill.low {
+  background: var(--danger);
+  color: white;
+}
+
 .modal {
   position: fixed;
   inset: 0;
@@ -363,7 +380,7 @@ button, input, textarea, select {
 
 .result-stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
   margin: 22px 0;
 }

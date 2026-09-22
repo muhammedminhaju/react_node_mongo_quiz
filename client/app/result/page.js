@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AppShell from '@/components/AppShell';
+import { formatDuration } from '@/lib/quizUtils';
 
 const emptyResult = { score: '0 / 0', correct: 0, wrong: 0, unanswered: 0, percentage: 0, totalQuestions: 0 };
 
@@ -41,6 +42,11 @@ export default function ResultPage() {
           <div>
             <strong>Unanswered:</strong> <span>{data.unanswered}</span>
           </div>
+          {result && (
+            <div>
+              <strong>Time Taken:</strong> <span>{formatDuration(result.timeTakenSeconds)}</span>
+            </div>
+          )}
         </div>
 
         <div className="result-actions">

@@ -22,6 +22,10 @@ export function filterHistory(history, { from, to, topic } = {}) {
   });
 }
 
+function hasTimeData(item) {
+  return typeof item.timeTakenSeconds === 'number' && !Number.isNaN(item.timeTakenSeconds);
+}
+
 export function computeSummary(filtered) {
   const totalQuizzes = filtered.length;
   const totalQuestions = filtered.reduce((sum, item) => sum + Number(item.totalQuestions || 0), 0);
@@ -34,6 +38,11 @@ export function computeSummary(filtered) {
   const bestPercentage = totalQuizzes ? Math.max(...filtered.map((item) => Number(item.percentage || 0))) : 0;
   const worstPercentage = totalQuizzes ? Math.min(...filtered.map((item) => Number(item.percentage || 0))) : 0;
 
+  const timedEntries = filtered.filter(hasTimeData);
+  const averageTimeSeconds = timedEntries.length
+    ? Math.round(timedEntries.reduce((sum, item) => sum + item.timeTakenSeconds, 0) / timedEntries.length)
+    : null;
+
   return {
     totalQuizzes,
     totalQuestions,
@@ -42,7 +51,8 @@ export function computeSummary(filtered) {
     totalUnanswered,
     averagePercentage,
     bestPercentage,
-    worstPercentage
+    worstPercentage,
+    averageTimeSeconds
   };
 }
 
@@ -64,11 +74,15 @@ export function computeTopicBreakdown(filtered) {
   filtered.forEach((item) => {
     const key = item.topic || 'unknown';
     if (!grouped.has(key)) {
-      grouped.set(key, { topic: key, label: labelForTopic(key), attempts: 0, totalPercentage: 0 });
+      grouped.set(key, { topic: key, label: labelForTopic(key), attempts: 0, totalPercentage: 0, timedAttempts: 0, totalTimeSeconds: 0 });
     }
     const entry = grouped.get(key);
     entry.attempts += 1;
     entry.totalPercentage += Number(item.percentage || 0);
+    if (hasTimeData(item)) {
+      entry.timedAttempts += 1;
+      entry.totalTimeSeconds += item.timeTakenSeconds;
+    }
   });
 
   return [...grouped.values()]
@@ -76,7 +90,8 @@ export function computeTopicBreakdown(filtered) {
       topic: entry.topic,
       label: entry.label,
       attempts: entry.attempts,
-      avgPercentage: Math.round(entry.totalPercentage / entry.attempts)
+      avgPercentage: Math.round(entry.totalPercentage / entry.attempts),
+      avgTimeSeconds: entry.timedAttempts ? Math.round(entry.totalTimeSeconds / entry.timedAttempts) : null
     }))
     .sort((a, b) => b.avgPercentage - a.avgPercentage);
 }
