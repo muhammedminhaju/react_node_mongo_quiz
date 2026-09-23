@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
 
 export const defaultSettings = {
   questionCount: 20,
+  useAllQuestions: false,
   shuffleQuestions: true,
   shuffleOptions: true,
   showExplanation: true,

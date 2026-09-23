@@ -43,7 +43,7 @@ async function ensureQuizLoaded() {
 
   const selected = localStorage.getItem('selectedTopic') || 'history';
   const settings = loadSettings();
-  const totalQuestions = Number(settings.questionCount) || 20;
+  const totalQuestions = settings.useAllQuestions ? undefined : Number(settings.questionCount) || 20;
 
   const revisionData = JSON.parse(localStorage.getItem('revisionQuizData') || '{}');
   if (revisionData && Array.isArray(revisionData.questions) && revisionData.questions.length) {
@@ -51,7 +51,7 @@ async function ensureQuizLoaded() {
     const finalQuestions = settings.shuffleQuestions ? fisherYates(questions) : questions;
     const state = {
       topic: 'Revision',
-      questions: finalQuestions.slice(0, totalQuestions || finalQuestions.length),
+      questions: finalQuestions.slice(0, totalQuestions),
       currentIndex: 0,
       selectedAnswers: {},
       startedAt: new Date().toISOString(),

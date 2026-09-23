@@ -44,10 +44,21 @@ export default function SettingsPage() {
           <input
             type="number"
             min={5}
-            max={100}
+            max={500}
+            disabled={settings.useAllQuestions}
             value={settings.questionCount}
             onChange={(event) => updateField('questionCount', event.target.value)}
           />
+        </div>
+        <div className="checkbox-row">
+          <label>
+            <input
+              type="checkbox"
+              checked={settings.useAllQuestions}
+              onChange={(event) => updateField('useAllQuestions', event.target.checked)}
+            />{' '}
+            Use all available questions for the topic (ignores the number above)
+          </label>
         </div>
         <div className="checkbox-row">
           <label>
