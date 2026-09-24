@@ -5,10 +5,10 @@ const { makeTopicKey, validateQuestion } = require('../utils/topicUtils');
 const {
   replaceTopicQuestions,
   listMongoTopicKeys,
-  dropTopicCollection,
-  renameTopicCollection,
+  deleteTopicQuestions,
+  renameTopicQuestions,
   isMongoConnected
-} = require('../models/TopicQuestions');
+} = require('../models/Question');
 
 const router = express.Router();
 const dataDir = path.join(__dirname, '..', 'data');
@@ -80,7 +80,8 @@ router.post('/import', async (req, res) => {
     question: String(question.question).trim(),
     options: question.options.map((option) => String(option).trim()),
     answer: String(question.answer).trim(),
-    explanation: question.explanation !== undefined ? String(question.explanation).trim() : ''
+    explanation: question.explanation !== undefined ? String(question.explanation).trim() : '',
+    errorCount: Number.isFinite(Number(question.errorCount)) ? Math.max(0, Number(question.errorCount)) : 0
   }));
 
   try {
@@ -185,7 +186,7 @@ router.put('/:name', async (req, res) => {
   try {
     if (sourcePath !== targetPath) {
       fs.renameSync(sourcePath, targetPath);
-      await renameTopicCollection(makeTopicKey(currentTopic), nextTopicKey);
+      await renameTopicQuestions(makeTopicKey(currentTopic), nextTopicKey);
     }
 
     res.json({
@@ -210,7 +211,7 @@ router.delete('/:name', async (req, res) => {
   const topicKey = makeTopicKey(currentTopic);
   const sourcePath = resolveTopicFile(currentTopic);
   const fileExists = Boolean(sourcePath && fs.existsSync(sourcePath));
-  const mongoExisted = await dropTopicCollection(topicKey);
+  const mongoExisted = await deleteTopicQuestions(topicKey);
 
   if (!fileExists && !mongoExisted) {
     return res.status(404).json({ error: 'Topic not found.' });

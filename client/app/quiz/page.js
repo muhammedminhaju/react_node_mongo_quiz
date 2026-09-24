@@ -251,24 +251,28 @@ export default function QuizPage() {
     localStorage.removeItem(QUIZ_STATE_KEY);
     localStorage.removeItem('revisionQuizData');
 
-    createReview({
-      topic: result.topic,
-      totalQuestions,
-      correct,
-      wrong,
-      unanswered,
-      percentage,
-      timeTakenSeconds,
-      timerMinutes: result.timerMinutes,
-      questions: state.questions.map((q, index) => ({
-        id: q.id,
-        question: q.question,
-        options: q.options,
-        answer: q.answer,
-        explanation: q.explanation,
-        selectedAnswer: state.selectedAnswers[index] ?? null
-      }))
-    }).catch(() => {});
+    const reviewQuestions = state.questions
+      .map((q, index) => ({ q, index }))
+      .filter(({ q }) => q._id)
+      .map(({ q, index }) => ({
+        questionId: q._id,
+        selectedAnswer: state.selectedAnswers[index] ?? null,
+        answer: q.answer
+      }));
+
+    if (reviewQuestions.length) {
+      createReview({
+        topic: result.topic,
+        totalQuestions,
+        correct,
+        wrong,
+        unanswered,
+        percentage,
+        timeTakenSeconds,
+        timerMinutes: result.timerMinutes,
+        questions: reviewQuestions
+      }).catch(() => {});
+    }
 
     router.push('/result');
   }

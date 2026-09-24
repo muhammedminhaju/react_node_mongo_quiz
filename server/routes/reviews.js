@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const QuizReview = require('../models/QuizReview');
+const { Question, isMongoConnected } = require('../models/Question');
+const { readQuestionsFromFile, writeQuestionsToFile } = require('../utils/questionFiles');
 
 const router = express.Router();
 
@@ -17,6 +19,85 @@ function requireDb(req, res, next) {
 
 router.use(requireDb);
 
+// Flattens the populated questionId back into the question's own fields, so
+// clients can keep reading review.questions[i].question/options/explanation
+// as before. If the referenced question no longer exists (e.g. its topic was
+// fully re-imported), or this is a review saved before questionId existed,
+// falls back to whatever was snapshotted directly on the entry itself.
+function flattenReview(review) {
+  return {
+    ...review,
+    questions: (review.questions || []).map((entry) => {
+      const question = entry.questionId && typeof entry.questionId === 'object' ? entry.questionId : null;
+      return {
+        id: question?.id ?? entry.id,
+        question: question?.question || entry.question || '',
+        options: question?.options || entry.options || [],
+        answer: entry.answer,
+        explanation: question?.explanation || entry.explanation || '',
+        selectedAnswer: entry.selectedAnswer
+      };
+    })
+  };
+}
+
+// A correct answer forgives one prior mistake (floored at 0); a wrong or
+// unanswered question adds one. Mirrors the updated counts into each
+// affected topic's JSON file too, so it stays the self-contained fallback.
+async function applyErrorCountUpdates(topic, questions) {
+  if (!isMongoConnected() || !questions.length) {
+    return;
+  }
+
+  const bulkOps = questions.map((question) => {
+    const isCorrect = question.selectedAnswer != null && String(question.selectedAnswer) === String(question.answer);
+    return {
+      updateOne: {
+        filter: { _id: question.questionId },
+        update: [
+          {
+            $set: {
+              errorCount: {
+                $max: [0, { $add: [{ $ifNull: ['$errorCount', 0] }, isCorrect ? -1 : 1] }]
+              }
+            }
+          }
+        ]
+      }
+    };
+  });
+
+  try {
+    await Question.bulkWrite(bulkOps);
+
+    const ids = questions.map((question) => question.questionId);
+    const updatedDocs = await Question.find({ _id: { $in: ids } })
+      .select('id errorCount')
+      .lean();
+    if (!updatedDocs.length) {
+      return;
+    }
+
+    const errorCountById = new Map(updatedDocs.map((doc) => [doc.id, doc.errorCount]));
+    const fileQuestions = readQuestionsFromFile(topic);
+    let changed = false;
+    const updatedFile = fileQuestions.map((fileQuestion) => {
+      if (!errorCountById.has(fileQuestion.id)) {
+        return fileQuestion;
+      }
+      changed = true;
+      return { ...fileQuestion, errorCount: errorCountById.get(fileQuestion.id) };
+    });
+
+    if (changed) {
+      writeQuestionsToFile(topic, updatedFile);
+    }
+  } catch (error) {
+    // The review itself already saved successfully; error-count tracking is
+    // best-effort on top of that.
+  }
+}
+
 router.post('/', async (req, res) => {
   const { topic, totalQuestions, correct, wrong, unanswered, percentage, questions } = req.body || {};
 
@@ -26,6 +107,10 @@ router.post('/', async (req, res) => {
 
   if (!Array.isArray(questions) || !questions.length) {
     return res.status(400).json({ error: 'Questions are required.' });
+  }
+
+  if (questions.some((question) => !question.questionId)) {
+    return res.status(400).json({ error: 'Each question must include a questionId.' });
   }
 
   try {
@@ -39,14 +124,14 @@ router.post('/', async (req, res) => {
       timeTakenSeconds: req.body.timeTakenSeconds != null ? Number(req.body.timeTakenSeconds) : null,
       timerMinutes: req.body.timerMinutes != null ? Number(req.body.timerMinutes) : null,
       questions: questions.map((question) => ({
-        id: question.id,
-        question: String(question.question || ''),
-        options: Array.isArray(question.options) ? question.options.map((option) => String(option)) : [],
-        answer: String(question.answer || ''),
-        explanation: question.explanation ? String(question.explanation) : '',
-        selectedAnswer: question.selectedAnswer != null ? String(question.selectedAnswer) : null
+        questionId: question.questionId,
+        selectedAnswer: question.selectedAnswer != null ? String(question.selectedAnswer) : null,
+        answer: String(question.answer || '')
       }))
     });
+
+    await applyErrorCountUpdates(String(topic).trim(), questions);
+
     res.status(201).json(review);
   } catch (error) {
     res.status(500).json({ error: 'Unable to save quiz review.' });
@@ -87,8 +172,8 @@ router.get('/', async (req, res) => {
       filter.topic = String(req.query.topic).trim();
     }
 
-    const reviews = await QuizReview.find(filter).sort({ date: -1 });
-    res.json(reviews);
+    const reviews = await QuizReview.find(filter).sort({ date: -1 }).populate('questions.questionId').lean();
+    res.json(reviews.map(flattenReview));
   } catch (error) {
     res.status(500).json({ error: 'Unable to load quiz reviews.' });
   }
@@ -96,11 +181,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const review = await QuizReview.findById(req.params.id);
+    const review = await QuizReview.findById(req.params.id).populate('questions.questionId').lean();
     if (!review) {
       return res.status(404).json({ error: 'Review not found.' });
     }
-    res.json(review);
+    res.json(flattenReview(review));
   } catch (error) {
     res.status(400).json({ error: 'Invalid review id.' });
   }

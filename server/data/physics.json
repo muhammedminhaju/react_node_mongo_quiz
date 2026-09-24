@@ -9,7 +9,8 @@
       "Pascal"
     ],
     "answer": "Newton",
-    "explanation": "Force is measured in newtons (N), which is kg·m/s²."
+    "explanation": "Force is measured in newtons (N), which is kg·m/s².",
+    "errorCount": 0
   },
   {
     "id": 2,
@@ -21,6 +22,7 @@
       "Absorption"
     ],
     "answer": "Refraction",
-    "explanation": "Rainbows are caused mainly by refraction and internal reflection of sunlight in raindrops."
+    "explanation": "Rainbows are caused mainly by refraction and internal reflection of sunlight in raindrops.",
+    "errorCount": 0
   }
 ]

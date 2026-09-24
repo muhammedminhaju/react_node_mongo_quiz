@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
+const syncFileTopicsToMongo = require('./utils/syncQuestions');
 const questionsRoutes = require('./routes/questions');
 const topicsRoutes = require('./routes/topics');
 const reviewsRoutes = require('./routes/reviews');
@@ -18,8 +19,10 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-connectDB().finally(() => {
-  app.listen(PORT, () => {
-    console.log(`Quiz API running at http://localhost:${PORT}`);
+connectDB()
+  .then(syncFileTopicsToMongo)
+  .finally(() => {
+    app.listen(PORT, () => {
+      console.log(`Quiz API running at http://localhost:${PORT}`);
+    });
   });
-});

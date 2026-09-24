@@ -9,7 +9,8 @@
       "Control Processing Unit"
     ],
     "answer": "Central Processing Unit",
-    "explanation": "CPU stands for Central Processing Unit and executes instructions."
+    "explanation": "CPU stands for Central Processing Unit and executes instructions.",
+    "errorCount": 0
   },
   {
     "id": 2,
@@ -21,6 +22,7 @@
       "Python"
     ],
     "answer": "CSS",
-    "explanation": "CSS is the styling language used to define layout, colors, and design."
+    "explanation": "CSS is the styling language used to define layout, colors, and design.",
+    "errorCount": 0
   }
 ]

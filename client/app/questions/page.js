@@ -10,10 +10,10 @@ const emptyForm = { question: '', optionA: '', optionB: '', optionC: '', optionD
 const OPTION_LABELS = ['Option A', 'Option B', 'Option C', 'Option D'];
 
 function buildAnswerOptions(form) {
-  const chosen = [form.optionA, form.optionB, form.optionC, form.optionD].filter((value) => value.trim());
+  const values = [form.optionA, form.optionB, form.optionC, form.optionD];
   return OPTION_LABELS.map((label, index) => {
-    const value = chosen[index] || label;
-    return { value, text: `${label}: ${value || '(empty)'}` };
+    const typed = (values[index] || '').trim();
+    return { key: label, value: typed || label, text: `${label}: ${typed || '(empty)'}` };
   });
 }
 
@@ -61,11 +61,16 @@ export default function QuestionsPage() {
 
   const filteredRows = useMemo(() => {
     const term = searchTerm.toLowerCase();
-    if (!term) return rows;
-    return rows.filter((question) => {
-      const searchable = [String(question.id), question.question, ...(question.options || [])].join(' ').toLowerCase();
-      return searchable.includes(term);
-    });
+    const filtered = term
+      ? rows.filter((question) => {
+          const searchable = [String(question.id), question.question, ...(question.options || [])]
+            .join(' ')
+            .toLowerCase();
+          return searchable.includes(term);
+        })
+      : rows;
+    // Highest error count first, so the questions needing the most attention surface to the top.
+    return [...filtered].sort((a, b) => (b.errorCount || 0) - (a.errorCount || 0));
   }, [rows, searchTerm]);
 
   const answerOptions = buildAnswerOptions(form);
@@ -279,14 +284,16 @@ export default function QuestionsPage() {
               <tr>
                 <th>ID</th>
                 <th>Question</th>
+                <th>Error Count</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredRows.map((question) => (
-                <tr key={question.id}>
+                <tr key={question.id} className={!question.errorCount ? 'row-mastered' : ''}>
                   <td>{question.id}</td>
                   <td>{question.question}</td>
+                  <td>{question.errorCount || 0}</td>
                   <td>
                     <button className="table-action" onClick={() => openEditModal(question)}>
                       Edit
@@ -352,7 +359,7 @@ export default function QuestionsPage() {
             <label>Correct Answer</label>
             <select value={form.answer} onChange={(event) => updateField('answer', event.target.value)}>
               {answerOptions.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.key} value={option.value}>
                   {option.text}
                 </option>
               ))}

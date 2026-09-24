@@ -1,5 +1,6 @@
 [
   {
+    "errorCount": 0,
     "id": 1,
     "question": "Who was the first President of India?",
     "options": [
@@ -12,6 +13,7 @@
     "explanation": "Dr. Rajendra Prasad was the first President of India."
   },
   {
+    "errorCount": 0,
     "id": 2,
     "question": "The Indian National Congress was founded in which year?",
     "options": [
@@ -24,6 +26,7 @@
     "explanation": "The Indian National Congress was founded in 1885."
   },
   {
+    "errorCount": 0,
     "id": 3,
     "question": "Who was the first Prime Minister of India?",
     "options": [
@@ -36,6 +39,7 @@
     "explanation": "Jawaharlal Nehru became the first Prime Minister of independent India."
   },
   {
+    "errorCount": 0,
     "id": 4,
     "question": "Which city is known as the Pink City of India?",
     "options": [

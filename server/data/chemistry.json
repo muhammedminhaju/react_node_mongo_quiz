@@ -9,7 +9,8 @@
       "NaCl"
     ],
     "answer": "H2O",
-    "explanation": "Water is composed of two hydrogen atoms and one oxygen atom."
+    "explanation": "Water is composed of two hydrogen atoms and one oxygen atom.",
+    "errorCount": 0
   },
   {
     "id": 2,
@@ -21,6 +22,7 @@
       "Hydrogen"
     ],
     "answer": "Carbon dioxide",
-    "explanation": "Plants absorb carbon dioxide during photosynthesis."
+    "explanation": "Plants absorb carbon dioxide during photosynthesis.",
+    "errorCount": 0
   }
 ]

@@ -9,7 +9,8 @@
       "92"
     ],
     "answer": "96",
-    "explanation": "Twelve times eight equals ninety-six."
+    "explanation": "Twelve times eight equals ninety-six.",
+    "errorCount": 0
   },
   {
     "id": 2,
@@ -21,6 +22,7 @@
       "5.14"
     ],
     "answer": "3.14",
-    "explanation": "Pi is approximately 3.14159, often rounded to 3.14."
+    "explanation": "Pi is approximately 3.14159, often rounded to 3.14.",
+    "errorCount": 0
   }
 ]

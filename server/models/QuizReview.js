@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const reviewQuestionSchema = new mongoose.Schema(
   {
-    id: mongoose.Schema.Types.Mixed,
-    question: { type: String, required: true },
-    options: { type: [String], default: [] },
-    answer: { type: String, required: true },
-    explanation: { type: String, default: '' },
-    selectedAnswer: { type: String, default: null }
+    questionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
+    selectedAnswer: { type: String, default: null },
+    // The correct answer is snapshotted here (not just read via questionId)
+    // so a review stays accurate even if the question is later edited or
+    // deleted (e.g. a full topic re-import replaces its documents).
+    answer: { type: String, required: true }
   },
   { _id: false }
 );
