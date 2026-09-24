@@ -264,6 +264,52 @@ button, input, textarea, select {
   margin-bottom: 20px;
 }
 
+.question-wrap {
+  border-radius: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.question-wrap.warn-low {
+  background: rgba(231, 76, 60, 0.06);
+  padding: 16px;
+}
+
+.question-wrap.warn-medium {
+  background: rgba(231, 76, 60, 0.12);
+  padding: 16px;
+}
+
+.question-wrap.warn-high {
+  background: rgba(231, 76, 60, 0.2);
+  padding: 16px;
+}
+
+.error-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+}
+
+.error-warning.warn-low {
+  background: rgba(231, 76, 60, 0.15);
+  color: var(--danger);
+}
+
+.error-warning.warn-medium {
+  background: rgba(231, 76, 60, 0.28);
+  color: var(--danger);
+}
+
+.error-warning.warn-high {
+  background: var(--danger);
+  color: white;
+}
+
 .options {
   display: grid;
   gap: 14px;

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import AppShell from '@/components/AppShell';
+import { formatDuration } from '@/lib/quizUtils';
 
 export default function ReviewPage() {
   const [reviewData, setReviewData] = useState(null);
@@ -40,6 +41,9 @@ export default function ReviewPage() {
                 </p>
                 <p>
                   <strong>Status:</strong> {isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                </p>
+                <p>
+                  <strong>Time Spent:</strong> {formatDuration((reviewData.questionTimeSeconds || {})[index] || 0)}
                 </p>
                 <p>
                   <strong>Explanation:</strong> {explanation}

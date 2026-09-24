@@ -35,7 +35,8 @@ function flattenReview(review) {
         options: question?.options || entry.options || [],
         answer: entry.answer,
         explanation: question?.explanation || entry.explanation || '',
-        selectedAnswer: entry.selectedAnswer
+        selectedAnswer: entry.selectedAnswer,
+        timeSpentSeconds: entry.timeSpentSeconds || 0
       };
     })
   };
@@ -126,7 +127,8 @@ router.post('/', async (req, res) => {
       questions: questions.map((question) => ({
         questionId: question.questionId,
         selectedAnswer: question.selectedAnswer != null ? String(question.selectedAnswer) : null,
-        answer: String(question.answer || '')
+        answer: String(question.answer || ''),
+        timeSpentSeconds: Math.max(0, Number(question.timeSpentSeconds) || 0)
       }))
     });
 

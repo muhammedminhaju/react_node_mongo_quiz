@@ -1,6 +1,6 @@
 [
   {
-    "errorCount": 3,
+    "errorCount": 0,
     "id": 4,
     "question": "Which organ is responsible for pumping blood throughout the body?",
     "options": [
@@ -13,7 +13,7 @@
     "explanation": "The heart pumps oxygenated blood to the body and deoxygenated blood to the lungs."
   },
   {
-    "errorCount": 2,
+    "errorCount": 0,
     "id": 5,
     "question": "What is the powerhouse of the cell?",
     "options": [
@@ -24,18 +24,5 @@
     ],
     "answer": "Mitochondria",
     "explanation": "Mitochondria generate most of the cell's ATP, hence the nickname 'powerhouse of the cell'."
-  },
-  {
-    "errorCount": 3,
-    "id": 6,
-    "question": "1",
-    "options": [
-      "1",
-      "11",
-      "111",
-      "1111"
-    ],
-    "answer": "11",
-    "explanation": "1111"
   }
 ]

@@ -190,6 +190,10 @@ export default function ReportsPage() {
               <div className="label">Avg. Time per Quiz</div>
               <div className="value">{formatDuration(summary.averageTimeSeconds)}</div>
             </div>
+            <div className="stat-card">
+              <div className="label">Avg. Time per Question</div>
+              <div className="value">{formatDuration(summary.averageTimePerQuestionSeconds)}</div>
+            </div>
           </section>
 
           <section className="content-card">

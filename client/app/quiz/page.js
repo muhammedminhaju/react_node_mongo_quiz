@@ -119,12 +119,16 @@ export default function QuizPage() {
   const autoSubmittedRef = useRef(false);
   const finishQuizRef = useRef(() => {});
   const initializedRef = useRef(false);
+  const questionStartRef = useRef(Date.now());
 
   useEffect(() => {
     setSettings(loadSettings());
     if (initializedRef.current) return;
     initializedRef.current = true;
-    ensureQuizLoaded().then(setState);
+    ensureQuizLoaded().then((loaded) => {
+      questionStartRef.current = Date.now();
+      setState(loaded);
+    });
   }, []);
 
   useEffect(() => {
@@ -168,10 +172,22 @@ export default function QuizPage() {
   const total = questions.length;
   const answeredValue = selectedAnswers[currentIndex];
   const score = Object.keys(selectedAnswers).length;
+  const errorCount = question.errorCount || 0;
+  const warningLevel = errorCount >= 6 ? 'high' : errorCount >= 3 ? 'medium' : errorCount >= 1 ? 'low' : null;
 
   function updateState(nextState) {
     saveQuizState(nextState);
     setState(nextState);
+  }
+
+  // Adds the time spent since the last commit to the current question's
+  // running total, and resets the clock. Called on every navigation and
+  // right before finishing, so the in-progress question always gets counted.
+  function commitCurrentTime() {
+    const elapsed = Math.max(0, Math.round((Date.now() - questionStartRef.current) / 1000));
+    questionStartRef.current = Date.now();
+    const prev = state.questionTimeSeconds || {};
+    return { ...prev, [state.currentIndex]: (prev[state.currentIndex] || 0) + elapsed };
   }
 
   function selectOption(option) {
@@ -186,13 +202,15 @@ export default function QuizPage() {
 
   function goPrev() {
     if (state.currentIndex > 0) {
-      updateState({ ...state, currentIndex: state.currentIndex - 1 });
+      const questionTimeSeconds = commitCurrentTime();
+      updateState({ ...state, questionTimeSeconds, currentIndex: state.currentIndex - 1 });
     }
   }
 
   function goNext() {
     if (state.currentIndex < state.questions.length - 1) {
-      updateState({ ...state, currentIndex: state.currentIndex + 1 });
+      const questionTimeSeconds = commitCurrentTime();
+      updateState({ ...state, questionTimeSeconds, currentIndex: state.currentIndex + 1 });
     } else {
       handleSubmitClick();
     }
@@ -207,24 +225,27 @@ export default function QuizPage() {
   }
 
   function finishQuiz() {
-    const totalQuestions = state.questions.length;
-    const correct = state.questions.reduce((count, q, index) => {
-      const chosen = state.selectedAnswers[index];
+    const questionTimeSeconds = commitCurrentTime();
+    const s = { ...state, questionTimeSeconds };
+
+    const totalQuestions = s.questions.length;
+    const correct = s.questions.reduce((count, q, index) => {
+      const chosen = s.selectedAnswers[index];
       return chosen && chosen === q.answer ? count + 1 : count;
     }, 0);
-    const wrong = state.questions.reduce((count, q, index) => {
-      const chosen = state.selectedAnswers[index];
+    const wrong = s.questions.reduce((count, q, index) => {
+      const chosen = s.selectedAnswers[index];
       return chosen && chosen !== q.answer ? count + 1 : count;
     }, 0);
     const unanswered = totalQuestions - correct - wrong;
     const percentage = totalQuestions ? Math.round((correct / totalQuestions) * 100) : 0;
-    const timeTakenSeconds = state.startedAt
-      ? Math.max(0, Math.round((Date.now() - new Date(state.startedAt).getTime()) / 1000))
+    const timeTakenSeconds = s.startedAt
+      ? Math.max(0, Math.round((Date.now() - new Date(s.startedAt).getTime()) / 1000))
       : null;
 
     const result = {
       id: generateId(),
-      topic: state.topic || 'Quiz',
+      topic: s.topic || 'Quiz',
       date: new Date().toISOString(),
       totalQuestions,
       correct,
@@ -233,13 +254,14 @@ export default function QuizPage() {
       percentage,
       score: `${correct}/${totalQuestions}`,
       timeTakenSeconds,
-      timerMinutes: state.timerMinutes || null
+      timerMinutes: s.timerMinutes || null
     };
 
     const reviewData = {
-      topic: state.topic || 'Quiz',
-      questions: state.questions,
-      selectedAnswers: state.selectedAnswers,
+      topic: s.topic || 'Quiz',
+      questions: s.questions,
+      selectedAnswers: s.selectedAnswers,
+      questionTimeSeconds,
       result
     };
 
@@ -251,13 +273,14 @@ export default function QuizPage() {
     localStorage.removeItem(QUIZ_STATE_KEY);
     localStorage.removeItem('revisionQuizData');
 
-    const reviewQuestions = state.questions
+    const reviewQuestions = s.questions
       .map((q, index) => ({ q, index }))
       .filter(({ q }) => q._id)
       .map(({ q, index }) => ({
         questionId: q._id,
-        selectedAnswer: state.selectedAnswers[index] ?? null,
-        answer: q.answer
+        selectedAnswer: s.selectedAnswers[index] ?? null,
+        answer: q.answer,
+        timeSpentSeconds: questionTimeSeconds[index] || 0
       }));
 
     if (reviewQuestions.length) {
@@ -302,7 +325,12 @@ export default function QuizPage() {
           </div>
         </div>
 
-        <div className="question-wrap">
+        <div className={`question-wrap${warningLevel ? ` warn-${warningLevel}` : ''}`}>
+          {warningLevel && (
+            <div className={`error-warning warn-${warningLevel}`}>
+              ⚠ You've missed this {errorCount} time{errorCount === 1 ? '' : 's'} before
+            </div>
+          )}
           <h2>{question.question}</h2>
           <div className="options">
             {(question.options || []).map((option) => (

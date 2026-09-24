@@ -43,6 +43,14 @@ export function computeSummary(filtered) {
     ? Math.round(timedEntries.reduce((sum, item) => sum + item.timeTakenSeconds, 0) / timedEntries.length)
     : null;
 
+  const timedEntriesWithQuestions = timedEntries.filter((item) => Number(item.totalQuestions) > 0);
+  const averageTimePerQuestionSeconds = timedEntriesWithQuestions.length
+    ? Math.round(
+        timedEntriesWithQuestions.reduce((sum, item) => sum + item.timeTakenSeconds / item.totalQuestions, 0) /
+          timedEntriesWithQuestions.length
+      )
+    : null;
+
   return {
     totalQuizzes,
     totalQuestions,
@@ -52,7 +60,8 @@ export function computeSummary(filtered) {
     averagePercentage,
     bestPercentage,
     worstPercentage,
-    averageTimeSeconds
+    averageTimeSeconds,
+    averageTimePerQuestionSeconds
   };
 }
 

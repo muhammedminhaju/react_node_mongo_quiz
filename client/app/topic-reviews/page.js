@@ -149,6 +149,9 @@ export default function TopicReviewsPage() {
                     <strong>Status:</strong> {isCorrect ? '✓ Correct' : '✗ Incorrect'}
                   </p>
                   <p>
+                    <strong>Time Spent:</strong> {formatDuration(question.timeSpentSeconds || 0)}
+                  </p>
+                  <p>
                     <strong>Explanation:</strong> {explanation}
                   </p>
                 </div>

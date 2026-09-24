@@ -7,7 +7,8 @@ const reviewQuestionSchema = new mongoose.Schema(
     // The correct answer is snapshotted here (not just read via questionId)
     // so a review stays accurate even if the question is later edited or
     // deleted (e.g. a full topic re-import replaces its documents).
-    answer: { type: String, required: true }
+    answer: { type: String, required: true },
+    timeSpentSeconds: { type: Number, default: 0, min: 0 }
   },
   { _id: false }
 );
