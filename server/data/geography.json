@@ -104,7 +104,7 @@
     "explanation": "The continental crust is rich in Silica and Alumina, hence SIAL. Granite is the commonly found rock."
   },
   {
-    "errorCount": 0,
+    "errorCount": 2,
     "id": 9,
     "question": "The oceanic crust is also known as SIMA because it is rich in:",
     "options": [
@@ -130,7 +130,7 @@
     "explanation": "Basalt is dominant in the oceanic crust (SIMA). Granite is dominant in the continental crust (SIAL)."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 11,
     "question": "What is the boundary between SIAL and SIMA called?",
     "options": [
@@ -156,7 +156,7 @@
     "explanation": "The Mohorovičić (Moho) discontinuity separates the crust from the mantle."
   },
   {
-    "errorCount": 0,
+    "errorCount": 2,
     "id": 13,
     "question": "The boundary between the upper mantle and the lower mantle is called:",
     "options": [
@@ -169,7 +169,7 @@
     "explanation": "The Repetti discontinuity lies between the upper and lower mantle."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 14,
     "question": "The boundary between the mantle and the core is called:",
     "options": [
@@ -182,7 +182,7 @@
     "explanation": "The Gutenberg discontinuity separates the mantle from the core. The Lehmann discontinuity separates the outer core from the inner core."
   },
   {
-    "errorCount": 1,
+    "errorCount": 0,
     "id": 15,
     "question": "The boundary between the outer core and the inner core is called:",
     "options": [
@@ -286,7 +286,7 @@
     "explanation": "The mantle extends down to about 2,900 km. The core extends from 2,900 km to 6,371 km, the Earth's centre."
   },
   {
-    "errorCount": 0,
+    "errorCount": 2,
     "id": 23,
     "question": "The core of the Earth is also known as:",
     "options": [
@@ -559,7 +559,7 @@
     "explanation": "ദ്രാവകാവസ്ഥയിലുള്ള പുറക്കാമ്പിനെയും ഖരാവസ്ഥയിലുള്ള അകക്കാമ്പിനെയും വേർതിരിക്കുന്നത് ലേമാൻ വിച്ഛിന്നതയാണ്."
   },
   {
-    "errorCount": 1,
+    "errorCount": 0,
     "id": 44,
     "question": "ഭൂവൽക്കത്തിൽ ഏറ്റവും കൂടുതലായി കാണപ്പെടുന്ന മൂലകം ഏതാണ്?",
     "options": [
@@ -637,7 +637,7 @@
     "explanation": "ഒളിവിൻ എന്ന സിലിക്കേറ്റുകൾ അടങ്ങിയ ശിലകളാണ് മാന്റിലിൽ മുഖ്യമായും കാണുന്നത്. ഫെൽസ്പാർ ഭൂവൽക്കത്തിലെ പ്രധാന ധാതുവാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 50,
     "question": "ഭൂവൽക്കത്തിന് താഴെ മാന്റിൽ ഏകദേശം എത്ര ആഴം വരെ വ്യാപിച്ചുകിടക്കുന്നു?",
     "options": [
@@ -663,7 +663,7 @@
     "explanation": "കാമ്പ് മുഖ്യമായും നിക്കൽ (Ni), ഇരുമ്പ് (Fe) എന്നീ ലോഹങ്ങളാൽ രൂപം കൊണ്ടതാണ്; അതിനാൽ NIFE എന്ന് പേര്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 2,
     "id": 52,
     "question": "പുറക്കാമ്പിന്റെയും അകക്കാമ്പിന്റെയും അവസ്ഥ യഥാക്രമം എന്താണ്?",
     "options": [

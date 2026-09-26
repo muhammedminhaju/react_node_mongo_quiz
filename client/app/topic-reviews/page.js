@@ -16,6 +16,17 @@ export default function TopicReviewsPage() {
   const [detailReview, setDetailReview] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
   const [error, setError] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  function statusOf(question) {
+    if (!question.selectedAnswer) return 'unanswered';
+    return question.selectedAnswer === question.answer ? 'correct' : 'wrong';
+  }
+
+  const detailTotals = { correct: 0, wrong: 0, unanswered: 0 };
+  (detailReview?.questions || []).forEach((q) => {
+    detailTotals[statusOf(q)] += 1;
+  });
 
   useEffect(() => {
     fetchReviewTopics()
@@ -112,7 +123,10 @@ export default function TopicReviewsPage() {
                       <td>{review.percentage}%</td>
                       <td>{formatDuration(review.timeTakenSeconds)}</td>
                       <td>
-                        <button className="table-action view" onClick={() => setDetailReview(review)}>
+                        <button className="table-action view" onClick={() => {
+                            setFilter('all');
+                            setDetailReview(review);
+                          }}>
                           View
                         </button>
                         <button className="table-action delete" onClick={() => setDeleteId(review._id)}>
@@ -131,9 +145,36 @@ export default function TopicReviewsPage() {
       <Modal open={Boolean(detailReview)} wide onClose={() => setDetailReview(null)}>
         <h3>Attempt Review</h3>
         {detailReview && (
+          <div className="preset-group">
+            {[
+              { key: 'all', label: `All (${detailReview.questions.length})` },
+              { key: 'wrong', label: `Wrong (${detailTotals.wrong})` },
+              { key: 'correct', label: `Not Wrong (${detailTotals.correct + detailTotals.unanswered})` }
+            ].map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                className={`preset-btn${filter === f.key ? ' active' : ''}`}
+                onClick={() => setFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        )}
+        {detailReview && (
+          <p>
+            <strong>Marks:</strong> {(Math.round((detailTotals.correct - detailTotals.wrong / 3) * 100) / 100).toFixed(2)} /{' '}
+            {detailReview.questions.length} &nbsp;(+1 correct, −1/3 wrong, 0 unanswered)
+          </p>
+        )}
+        {detailReview && (
           <div className="detail-box">
             {detailReview.questions.map((question, index) => {
-              const isCorrect = question.selectedAnswer === question.answer;
+              const status = statusOf(question);
+              if (filter === 'wrong' && status !== 'wrong') return null;
+              if (filter === 'correct' && status === 'wrong') return null;
+              const isCorrect = status === 'correct';
               const explanation = question.explanation || 'No explanation provided.';
               return (
                 <div className={`review-item ${isCorrect ? 'correct' : 'incorrect'}`} key={question.id ?? index}>
@@ -147,6 +188,9 @@ export default function TopicReviewsPage() {
                   </p>
                   <p>
                     <strong>Status:</strong> {isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                  </p>
+                  <p>
+                    <strong>Mark:</strong> {status === 'correct' ? '+1' : status === 'wrong' ? '−0.33' : '0'}
                   </p>
                   <p>
                     <strong>Time Spent:</strong> {formatDuration(question.timeSpentSeconds || 0)}
