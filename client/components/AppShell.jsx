@@ -20,14 +20,27 @@ const NAV_LINKS = [
 export default function AppShell({ title, actions, children }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     const settings = loadSettings();
     document.body.classList.toggle('dark-mode', Boolean(settings.darkMode));
+    try {
+      setCollapsed(localStorage.getItem('sidebarCollapsed') === '1');
+    } catch (error) {}
   }, []);
 
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      try {
+        localStorage.setItem('sidebarCollapsed', prev ? '0' : '1');
+      } catch (error) {}
+      return !prev;
+    });
+  }
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell${collapsed ? ' sidebar-collapsed' : ''}`}>
       <aside className={`sidebar${mobileOpen ? ' mobile-open' : ''}`}>
         <div className="brand">
           <div className="brand-mark">Q</div>
@@ -48,6 +61,14 @@ export default function AppShell({ title, actions, children }) {
         <header className="topbar">
           <button type="button" className="mobile-menu" onClick={() => setMobileOpen((open) => !open)}>
             ☰
+          </button>
+          <button
+            type="button"
+            className="sidebar-toggle"
+            onClick={toggleCollapsed}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? '»' : '«'}
           </button>
           <div className="topbar-title">{title}</div>
           <div className="topbar-actions">{actions}</div>

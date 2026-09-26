@@ -65,7 +65,10 @@ async function ensureQuizLoaded() {
     const questions = await fetchQuestions(selected);
     const normalized = (questions || []).map(normalizeQuestion);
     const shuffled = settings.shuffleQuestions ? fisherYates(normalized) : normalized;
-    const prepared = shuffled
+    // Stable sort: highest errorCount first, ties keep their (shuffled) order,
+    // so the slice below always picks the most-missed questions.
+    const prioritized = [...shuffled].sort((a, b) => (b.errorCount || 0) - (a.errorCount || 0));
+    const prepared = prioritized
       .map((question) => ({
         ...question,
         options: settings.shuffleOptions ? fisherYates(question.options || []) : [...(question.options || [])]
@@ -200,6 +203,24 @@ export default function QuizPage() {
     updateState({ ...state, selectedAnswers: nextAnswers });
   }
 
+  const bookmarks = state.bookmarks || {};
+
+  function toggleBookmark() {
+    const next = { ...bookmarks };
+    if (next[currentIndex]) {
+      delete next[currentIndex];
+    } else {
+      next[currentIndex] = true;
+    }
+    updateState({ ...state, bookmarks: next });
+  }
+
+  function goTo(index) {
+    if (index === state.currentIndex) return;
+    const questionTimeSeconds = commitCurrentTime();
+    updateState({ ...state, questionTimeSeconds, currentIndex: index });
+  }
+
   function goPrev() {
     if (state.currentIndex > 0) {
       const questionTimeSeconds = commitCurrentTime();
@@ -315,10 +336,19 @@ export default function QuizPage() {
         </>
       }
     >
+      <div className="quiz-layout">
       <section className="content-card quiz-card">
         <div className="quiz-meta">
           <div>
             Question {currentIndex + 1} / {total}
+            <button
+              type="button"
+              className={`bookmark-btn${bookmarks[currentIndex] ? ' active' : ''}`}
+              style={{ marginLeft: 12 }}
+              onClick={toggleBookmark}
+            >
+              {bookmarks[currentIndex] ? '★ Bookmarked' : '☆ Bookmark'}
+            </button>
           </div>
           <div className="progress-bar">
             <span style={{ width: `${((currentIndex + 1) / total) * 100}%` }} />
@@ -358,6 +388,41 @@ export default function QuizPage() {
           </button>
         </div>
       </section>
+
+      <aside className="content-card quiz-nav">
+        <h4>Questions</h4>
+        <div className="quiz-nav-grid">
+          {questions.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              className={`nav-num${selectedAnswers[index] ? ' answered' : ''}${
+                index === currentIndex ? ' current' : ''
+              }${bookmarks[index] ? ' bookmarked' : ''}`}
+              onClick={() => goTo(index)}
+              title={`Question ${index + 1}${selectedAnswers[index] ? ' - answered' : ' - not answered'}${
+                bookmarks[index] ? ' - bookmarked' : ''
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+        <div className="nav-legend">
+          <span>
+            <span className="swatch" style={{ background: 'var(--success)' }} />
+            Answered
+          </span>
+          <span>
+            <span className="swatch" />
+            Not answered
+          </span>
+          <span>
+            <span style={{ color: 'var(--warning)' }}>★</span> Bookmarked
+          </span>
+        </div>
+      </aside>
+      </div>
 
       <Modal open={submitModalOpen}>
         <h3>Submit Quiz?</h3>

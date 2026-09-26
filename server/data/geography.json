@@ -1,6 +1,6 @@
 [
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 1,
     "question": "Which of the following is a DIRECT source of information about the Earth's interior?",
     "options": [
@@ -13,7 +13,7 @@
     "explanation": "Mines, drilling projects, volcanoes and rock samples give direct information. Meteorites, gravity and the magnetic field are indirect sources."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 2,
     "question": "Which of the following is an INDIRECT source of information about the Earth's interior?",
     "options": [
@@ -39,7 +39,7 @@
     "explanation": "The Kola Peninsula borehole in the Arctic region of Russia reaches about 12 km (12,262 m)."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 4,
     "question": "The Deep Sea Drilling Project (DSDP) operated during which period?",
     "options": [
@@ -52,7 +52,7 @@
     "explanation": "DSDP ran from 1968 to 1983 and provided crucial data supporting seafloor spreading and plate tectonics. ODP followed in 1985, IODP in 2004, and the present IODP (International Ocean Discovery Program) in 2013."
   },
   {
-    "errorCount": 1,
+    "errorCount": 2,
     "id": 5,
     "question": "Which gold mine near Johannesburg in South Africa is mentioned as a source of rock samples?",
     "options": [
@@ -65,7 +65,7 @@
     "explanation": "The notes mention gold mining in Johannesburg, South Africa. This is the Witwatersrand region, known for its very deep gold mines."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 6,
     "question": "Which layer of the Earth is called the 'Barysphere'?",
     "options": [
@@ -78,7 +78,7 @@
     "explanation": "The core is called the Barysphere. The mantle is called the Mesosphere."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 7,
     "question": "Which layer of the Earth is also known as the 'Mesosphere'?",
     "options": [
@@ -91,7 +91,7 @@
     "explanation": "The mantle, lying between the crust and the core, is called the Mesosphere."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 8,
     "question": "The continental crust is also known as:",
     "options": [
@@ -104,7 +104,7 @@
     "explanation": "The continental crust is rich in Silica and Alumina, hence SIAL. Granite is the commonly found rock."
   },
   {
-    "errorCount": 2,
+    "errorCount": 3,
     "id": 9,
     "question": "The oceanic crust is also known as SIMA because it is rich in:",
     "options": [
@@ -117,7 +117,7 @@
     "explanation": "SIMA stands for Silica + Magnesium. The rock commonly found in the oceanic crust is basalt."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 10,
     "question": "Which rock is most commonly found in the oceanic crust?",
     "options": [
@@ -130,7 +130,7 @@
     "explanation": "Basalt is dominant in the oceanic crust (SIMA). Granite is dominant in the continental crust (SIAL)."
   },
   {
-    "errorCount": 1,
+    "errorCount": 2,
     "id": 11,
     "question": "What is the boundary between SIAL and SIMA called?",
     "options": [
@@ -143,7 +143,7 @@
     "explanation": "The Conrad discontinuity separates SIAL (upper crust) from SIMA (lower crust)."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 12,
     "question": "The boundary between the crust and the mantle is called:",
     "options": [
@@ -156,7 +156,7 @@
     "explanation": "The Mohorovičić (Moho) discontinuity separates the crust from the mantle."
   },
   {
-    "errorCount": 2,
+    "errorCount": 3,
     "id": 13,
     "question": "The boundary between the upper mantle and the lower mantle is called:",
     "options": [
@@ -169,7 +169,7 @@
     "explanation": "The Repetti discontinuity lies between the upper and lower mantle."
   },
   {
-    "errorCount": 1,
+    "errorCount": 2,
     "id": 14,
     "question": "The boundary between the mantle and the core is called:",
     "options": [
@@ -182,7 +182,7 @@
     "explanation": "The Gutenberg discontinuity separates the mantle from the core. The Lehmann discontinuity separates the outer core from the inner core."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 15,
     "question": "The boundary between the outer core and the inner core is called:",
     "options": [
@@ -195,7 +195,7 @@
     "explanation": "The Lehmann discontinuity lies between the outer core (liquid) and the inner core (solid)."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 16,
     "question": "Which element is found in the greatest amount in the Earth's crust?",
     "options": [
@@ -208,7 +208,7 @@
     "explanation": "Oxygen is the most abundant element in the crust. Aluminium is the most abundant metal, and feldspar is the most abundant mineral."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 17,
     "question": "Which is the most abundant metal in the Earth's crust?",
     "options": [
@@ -221,7 +221,7 @@
     "explanation": "Aluminium is the most abundant metal in the crust."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 18,
     "question": "The average density of the continental crust and the oceanic crust respectively is about:",
     "options": [
@@ -234,7 +234,7 @@
     "explanation": "The continental crust averages 2.7 g/cm³, while the oceanic crust is denser at about 3 g/cm³. The oceanic crust is thinner (about 15 km on average)."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 19,
     "question": "The lithosphere consists of:",
     "options": [
@@ -247,7 +247,7 @@
     "explanation": "The crust together with the solid upper part of the mantle forms the lithosphere."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 20,
     "question": "The asthenosphere, the main source of magma, is in which state?",
     "options": [
@@ -260,7 +260,7 @@
     "explanation": "The asthenosphere lies below the lithosphere (up to about 400 km) and is semi-molten. It is the chief source of magma, which is called lava when it reaches the surface."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 21,
     "question": "Which mineral group makes up most of the rocks of the mantle?",
     "options": [
@@ -273,7 +273,7 @@
     "explanation": "The mantle is mainly composed of olivine-type silicate rocks. Feldspar is the most abundant mineral in the crust."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 22,
     "question": "The mantle extends from below the crust to a depth of about:",
     "options": [
@@ -286,7 +286,7 @@
     "explanation": "The mantle extends down to about 2,900 km. The core extends from 2,900 km to 6,371 km, the Earth's centre."
   },
   {
-    "errorCount": 2,
+    "errorCount": 3,
     "id": 23,
     "question": "The core of the Earth is also known as:",
     "options": [
@@ -299,7 +299,7 @@
     "explanation": "The core is made mainly of Nickel (Ni) and Iron (Fe), hence the name NIFE."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 24,
     "question": "What is the state of the outer core and the inner core respectively?",
     "options": [
@@ -312,7 +312,7 @@
     "explanation": "The outer core is liquid and the inner core is solid, despite very high temperatures, because of the immense pressure."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 25,
     "question": "Which is the densest layer of the Earth, with an average density of about 13 g/cm³?",
     "options": [
@@ -325,7 +325,7 @@
     "explanation": "The core, especially the inner core, is the densest layer, with a density of about 13 g/cm³ at the Earth's centre."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 26,
     "question": "What is the approximate temperature at the Earth's centre?",
     "options": [
@@ -338,7 +338,7 @@
     "explanation": "The temperature at the inner core is about 5,500 degrees Celsius."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 27,
     "question": "The variation in gravity values at different places on the Earth's surface, caused by uneven distribution of mass, is called:",
     "options": [
@@ -351,7 +351,7 @@
     "explanation": "Differences in the distribution of mass within the crust cause gravity anomalies, which help us understand the interior."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 28,
     "question": "Which safety device is worn by miners to protect themselves from poisonous gases coming from the Earth's interior?",
     "options": [
@@ -364,7 +364,7 @@
     "explanation": "Miners use an oxy box, a life-saving device, to protect themselves from toxic gases emitted from inside the Earth."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 29,
     "question": "ഭൂമിയുടെ ഉൾഭാഗത്തെക്കുറിച്ച് നേരിട്ട് വിവരം ലഭിക്കുന്ന സ്രോതസ്സ് ഏതാണ്?",
     "options": [
@@ -377,7 +377,7 @@
     "explanation": "ഖനികൾ, ഡ്രില്ലിംഗ് പ്രോജക്ടുകൾ, അഗ്നിപർവ്വതങ്ങൾ, ശിലാവസ്തുക്കൾ എന്നിവ നേരിട്ടുള്ള സ്രോതസ്സുകളാണ്. ഉൽക്കാശിലകൾ, ഭൂഗുരുത്വാകർഷണം, ഭൗമകാന്തിക മണ്ഡലം എന്നിവ പരോക്ഷ സ്രോതസ്സുകളാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 30,
     "question": "ഭൂമിയുടെ ഉൾഭാഗത്തെക്കുറിച്ച് പരോക്ഷമായി വിവരം നൽകുന്ന സ്രോതസ്സ് ഏതാണ്?",
     "options": [
@@ -390,7 +390,7 @@
     "explanation": "ഉൽക്കാവസ്തുക്കൾ ഭൂമിക്കുള്ളിൽ നിന്ന് ലഭിക്കുന്നതല്ല. എന്നാൽ അവയുടെയും ഭൂമിയിലെ വസ്തുക്കളുടെയും ഘടനയിൽ സമാനതയുള്ളതിനാൽ അവ പരോക്ഷ തെളിവ് നൽകുന്നു."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 31,
     "question": "ലോകത്തിലെ ഏറ്റവും ആഴമേറിയ കുഴിയായ കോലാ സൂപ്പർഡീപ് ബോർഹോളിന്റെ ആഴം ഏകദേശം എത്ര?",
     "options": [
@@ -403,7 +403,7 @@
     "explanation": "ആർട്ടിക് മേഖലയിലെ കോലാ ഉപദ്വീപിലുള്ള ഈ കുഴിക്ക് ഏകദേശം 12 കിലോമീറ്റർ (12,262 മീറ്റർ) ആഴമുണ്ട്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 32,
     "question": "ഡീപ് സീ ഡ്രില്ലിംഗ് പ്രോജക്ട് (DSDP) പ്രവർത്തിച്ചിരുന്നത് ഏത് കാലയളവിലാണ്?",
     "options": [
@@ -416,7 +416,7 @@
     "explanation": "DSDP 1968 മുതൽ 1983 വരെ പ്രവർത്തിച്ചു. തുടർന്ന് 1985-ൽ ODP, 2004-ൽ ഇന്റഗ്രേറ്റഡ് ഓഷ്യൻ ഡ്രില്ലിംഗ് പ്രോഗ്രാം, 2013-ൽ ഇന്റർനാഷണൽ ഓഷ്യൻ ഡിസ്കവറി പ്രോഗ്രാം എന്നിവ വന്നു."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 33,
     "question": "കടൽത്തറ വ്യാപനം (seafloor spreading) സിദ്ധാന്തത്തെയും ഫലകചലന സിദ്ധാന്തത്തെയും പിന്തുണയ്ക്കുന്ന നിർണായക വിവരങ്ങൾ നൽകിയ പദ്ധതി ഏതാണ്?",
     "options": [
@@ -429,7 +429,7 @@
     "explanation": "DSDP നൽകിയ വിവരങ്ങൾ കടൽത്തറ വ്യാപന സിദ്ധാന്തത്തെ പിന്തുണയ്ക്കുകയും ഫലകചലന സിദ്ധാന്തം തെളിയിക്കാൻ സഹായിക്കുകയും ചെയ്തു."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 34,
     "question": "'ബാരിസ്ഫിയർ' എന്നറിയപ്പെടുന്ന ഭൂമിയുടെ പാളി ഏതാണ്?",
     "options": [
@@ -442,7 +442,7 @@
     "explanation": "കാമ്പ് ബാരിസ്ഫിയർ എന്നറിയപ്പെടുന്നു. മാന്റിൽ മീസോസ്ഫിയർ എന്നും അറിയപ്പെടുന്നു."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 35,
     "question": "'മീസോസ്ഫിയർ' എന്നറിയപ്പെടുന്ന ഭൂമിയുടെ പാളി ഏതാണ്?",
     "options": [
@@ -455,7 +455,7 @@
     "explanation": "ഭൂവൽക്കത്തിനും കാമ്പിനും ഇടയിലുള്ള മാന്റിൽ മീസോസ്ഫിയർ എന്നറിയപ്പെടുന്നു."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 36,
     "question": "വൻകര ഭൂവൽക്കം അറിയപ്പെടുന്ന പേര് ഏതാണ്?",
     "options": [
@@ -468,7 +468,7 @@
     "explanation": "സിലിക്ക, അലുമിന എന്നീ ധാതുക്കൾ മുഖ്യമായി അടങ്ങിയതിനാൽ വൻകര ഭൂവൽക്കം സിയാൽ എന്നറിയപ്പെടുന്നു. ഗ്രാനൈറ്റ് ശിലയാണ് ഇവിടെ കൂടുതലായി കാണുന്നത്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 37,
     "question": "സമുദ്ര ഭൂവൽക്കത്തെ 'സിമ' (SIMA) എന്ന് വിളിക്കുന്നത് ഏത് ധാതുക്കൾ മുഖ്യമായി അടങ്ങിയിരിക്കുന്നതിനാലാണ്?",
     "options": [
@@ -481,7 +481,7 @@
     "explanation": "SIMA = Silica + Magnesia. സമുദ്ര ഭൂവൽക്കത്തിൽ കൂടുതലായി കാണപ്പെടുന്ന ശില ബസാൾട്ട് ആണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 38,
     "question": "സമുദ്ര ഭൂവൽക്കത്തിൽ കൂടുതലായി കാണപ്പെടുന്ന ശില ഏതാണ്?",
     "options": [
@@ -494,7 +494,7 @@
     "explanation": "സമുദ്ര ഭൂവൽക്കത്തിൽ (സിമ) ബസാൾട്ടും വൻകര ഭൂവൽക്കത്തിൽ (സിയാൽ) ഗ്രാനൈറ്റും ആണ് പ്രധാനം."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 39,
     "question": "സിയാലിന്റെയും സിമയുടെയും അതിർത്തി അറിയപ്പെടുന്നത് ഏത് പേരിലാണ്?",
     "options": [
@@ -507,7 +507,7 @@
     "explanation": "മേൽഭൂവൽക്കമായ സിയാലിനെയും കീഴ്ഭൂവൽക്കമായ സിമയെയും വേർതിരിക്കുന്നത് കോൺറാഡ് വിച്ഛിന്നതയാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 40,
     "question": "ഭൂവൽക്കത്തിന്റെയും മാന്റിലിന്റെയും അതിർവരമ്പ് ഏതാണ്?",
     "options": [
@@ -533,7 +533,7 @@
     "explanation": "ഉപരി മാന്റിലിനെയും അധോ മാന്റിലിനെയും വേർതിരിക്കുന്നത് റെപ്പെറ്റി വിച്ഛിന്നതയാണ്."
   },
   {
-    "errorCount": 1,
+    "errorCount": 2,
     "id": 42,
     "question": "മാന്റിലിന്റെയും കാമ്പിന്റെയും അതിർത്തി ഏതാണ്?",
     "options": [
@@ -546,7 +546,7 @@
     "explanation": "മാന്റിലിനെയും കാമ്പിനെയും വേർതിരിക്കുന്നത് ഗുട്ടൻബർഗ് വിച്ഛിന്നതയാണ്. പുറക്കാമ്പിനെയും അകക്കാമ്പിനെയും വേർതിരിക്കുന്നത് ലേമാൻ വിച്ഛിന്നതയാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 43,
     "question": "പുറക്കാമ്പിന്റെയും അകക്കാമ്പിന്റെയും അതിർവരമ്പ് ഏതാണ്?",
     "options": [
@@ -559,7 +559,7 @@
     "explanation": "ദ്രാവകാവസ്ഥയിലുള്ള പുറക്കാമ്പിനെയും ഖരാവസ്ഥയിലുള്ള അകക്കാമ്പിനെയും വേർതിരിക്കുന്നത് ലേമാൻ വിച്ഛിന്നതയാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 44,
     "question": "ഭൂവൽക്കത്തിൽ ഏറ്റവും കൂടുതലായി കാണപ്പെടുന്ന മൂലകം ഏതാണ്?",
     "options": [
@@ -572,7 +572,7 @@
     "explanation": "ഭൂവൽക്കത്തിൽ ഏറ്റവും കൂടുതലുള്ള മൂലകം ഓക്സിജനാണ്. ഏറ്റവും കൂടുതലുള്ള ലോഹം അലൂമിനിയവും ധാതു ഫെൽസ്പാറുമാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 45,
     "question": "ഭൂവൽക്കത്തിൽ ഏറ്റവും കൂടുതലായി കാണപ്പെടുന്ന ലോഹം ഏതാണ്?",
     "options": [
@@ -585,7 +585,7 @@
     "explanation": "ഭൂവൽക്കത്തിൽ ഏറ്റവും സമൃദ്ധമായ ലോഹം അലൂമിനിയമാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 46,
     "question": "വൻകര ഭൂവൽക്കത്തിന്റെയും സമുദ്ര ഭൂവൽക്കത്തിന്റെയും ശരാശരി സാന്ദ്രത യഥാക്രമം എത്ര?",
     "options": [
@@ -598,7 +598,7 @@
     "explanation": "വൻകര ഭൂവൽക്കത്തിന്റെ ശരാശരി സാന്ദ്രത 2.7 g/cm³ ഉം സമുദ്ര ഭൂവൽക്കത്തിന്റേത് 3 g/cm³ ഉം ആണ്. കനം കൂടുതൽ വൻകര ഭൂവൽക്കത്തിനാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 47,
     "question": "ശിലാമണ്ഡലം (ലിത്തോസ്ഫിയർ) എന്നത് ഏതെല്ലാം ഭാഗങ്ങൾ ചേർന്നതാണ്?",
     "options": [
@@ -611,7 +611,7 @@
     "explanation": "ഭൂവൽക്കവും മാന്റിലിന്റെ ഖരാവസ്ഥയിലുള്ള ഉപരിഭാഗവും ചേർന്നതാണ് ലിത്തോസ്ഫിയർ."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 48,
     "question": "ഭൂമിയിലെ മാഗ്മയുടെ ഏറ്റവും പ്രധാന സ്രോതസ്സായ അസ്തനോസ്ഫിയർ ഏത് അവസ്ഥയിലാണ്?",
     "options": [
@@ -624,7 +624,7 @@
     "explanation": "ലിത്തോസ്ഫിയറിന് താഴെ ഏകദേശം 400 കി.മീ വരെയുള്ള അസ്തനോസ്ഫിയർ അർദ്ധദ്രാവകാവസ്ഥയിലാണ്. അഗ്നിപർവത പ്രവാഹങ്ങളിലൂടെ മാഗ്മ ഉപരിതലത്തിൽ എത്തുമ്പോൾ ലാവ എന്നറിയപ്പെടുന്നു."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 49,
     "question": "മാന്റിലിൽ മുഖ്യമായും കാണപ്പെടുന്ന ശിലകൾ ഏത് വിഭാഗത്തിൽപ്പെടുന്നു?",
     "options": [
@@ -637,7 +637,7 @@
     "explanation": "ഒളിവിൻ എന്ന സിലിക്കേറ്റുകൾ അടങ്ങിയ ശിലകളാണ് മാന്റിലിൽ മുഖ്യമായും കാണുന്നത്. ഫെൽസ്പാർ ഭൂവൽക്കത്തിലെ പ്രധാന ധാതുവാണ്."
   },
   {
-    "errorCount": 1,
+    "errorCount": 2,
     "id": 50,
     "question": "ഭൂവൽക്കത്തിന് താഴെ മാന്റിൽ ഏകദേശം എത്ര ആഴം വരെ വ്യാപിച്ചുകിടക്കുന്നു?",
     "options": [
@@ -650,7 +650,7 @@
     "explanation": "മാന്റിൽ ഏകദേശം 2,900 കി.മീ വരെ വ്യാപിച്ചു കിടക്കുന്നു. കാമ്പ് 2,900 കി.മീ മുതൽ 6,371 കി.മീ വരെയാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 51,
     "question": "കാമ്പിന് 'നിഫെ' (NIFE) എന്ന പേര് ലഭിച്ചത് ഏതു മൂലകങ്ങൾ കാരണമാണ്?",
     "options": [
@@ -663,7 +663,7 @@
     "explanation": "കാമ്പ് മുഖ്യമായും നിക്കൽ (Ni), ഇരുമ്പ് (Fe) എന്നീ ലോഹങ്ങളാൽ രൂപം കൊണ്ടതാണ്; അതിനാൽ NIFE എന്ന് പേര്."
   },
   {
-    "errorCount": 2,
+    "errorCount": 3,
     "id": 52,
     "question": "പുറക്കാമ്പിന്റെയും അകക്കാമ്പിന്റെയും അവസ്ഥ യഥാക്രമം എന്താണ്?",
     "options": [
@@ -676,7 +676,7 @@
     "explanation": "പുറക്കാമ്പ് ദ്രാവകാവസ്ഥയിലും അകക്കാമ്പ് ഖരാവസ്ഥയിലുമാണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 53,
     "question": "ശരാശരി സാന്ദ്രത ഏകദേശം 13 g/cm³ ഉള്ള, ഭൂമിയിലെ ഏറ്റവും സാന്ദ്രത കൂടിയ പാളി ഏതാണ്?",
     "options": [
@@ -689,7 +689,7 @@
     "explanation": "ഭൂമിയിലെ ഏറ്റവും സാന്ദ്രത കൂടിയ പാളി കാമ്പാണ്, പ്രത്യേകിച്ച് അകക്കാമ്പ്. അവിടത്തെ ശരാശരി സാന്ദ്രത ഏകദേശം 13 g/cm³ ആണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 54,
     "question": "ഭൂമിയുടെ കേന്ദ്രഭാഗത്ത് അനുഭവപ്പെടുന്ന ശരാശരി താപനില ഏകദേശം എത്രയാണ്?",
     "options": [
@@ -702,7 +702,7 @@
     "explanation": "ഭൂമിയുടെ കേന്ദ്രഭാഗത്തെ ശരാശരി താപനില ഏകദേശം 5500 ഡിഗ്രി സെൽഷ്യസ് ആണ്."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 55,
     "question": "വസ്തുക്കളുടെ പിണ്ഡത്തിലെ വ്യത്യാസം കാരണം ഭൂമിയുടെ ഉപരിതലത്തിൽ അനുഭവപ്പെടുന്ന ഭൂഗുരുത്വത്തിന്റെ അളവിലുള്ള വ്യത്യാസം അറിയപ്പെടുന്നത് എങ്ങനെ?",
     "options": [
@@ -715,7 +715,7 @@
     "explanation": "ഭൂഗുരുത്വത്തിന്റെ അളവിലെ ഈ വ്യത്യാസത്തെ ഗ്രാവിറ്റി അനോമലി എന്ന് വിളിക്കുന്നു. ഇത് വസ്തുക്കളുടെ പിണ്ഡത്തിന്റെ വിതരണക്രമം മനസ്സിലാക്കാൻ സഹായിക്കും."
   },
   {
-    "errorCount": 0,
+    "errorCount": 1,
     "id": 56,
     "question": "ഭൂമിയുടെ ഉള്ളിൽ നിന്ന് വമിക്കുന്ന വിഷവാതകങ്ങളിൽ നിന്ന് രക്ഷനേടാൻ ഖനിത്തൊഴിലാളികൾ ധരിക്കുന്ന ജീവൻരക്ഷാ ഉപകരണം ഏതാണ്?",
     "options": [
